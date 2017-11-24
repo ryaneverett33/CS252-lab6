@@ -1,4 +1,4 @@
-function Player() {
+function Player(floorPosY) {
 	var posX = 100;
 	var posY = 100;
 	var velX =  0;
@@ -7,7 +7,6 @@ function Player() {
 	var height = 100;
 	var color = "blue";
 	var gravity = 0.5;
-	var floorHeight = 300;
 
 	this.update = function() {
 		if(Input.getInstance().isKeyPressed(32)) {
@@ -19,8 +18,9 @@ function Player() {
 		posX += velX;
 		posY += velY;
 
-		if(posY >= 300) {
-			posY = 300;
+		if(posY + height > floorPosY) {
+			posY = floorPosY - height;
+			velY = 0;
 		}
 	}
 
