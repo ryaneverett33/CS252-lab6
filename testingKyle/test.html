@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+	<title>Dino Runner</title>
+</head>
+<body>
+	<div id="container">
+		<canvas
+			id="canvas"
+			width="1024"
+			height="576"
+			oncontextmenu="return false;"
+			tabindex=1>
+		</canvas>
+	</div>
+
+	<script src="input.js"></script>
+	<script src="player.js"></script>
+	<script src="game.js"></script>
+	<script>
+		new Game().start();
+	</script>
+</body>
+</html>
