@@ -1,4 +1,4 @@
-function Game() {
+function GameManager() {
 	var canvasElement = document.getElementById("canvas");
 	var canvas = canvasElement.getContext("2d");
 	var width = canvasElement.getAttribute("width");
@@ -6,12 +6,19 @@ function Game() {
 	canvasElement.focus();
 
 	var FPS = 60;
+	var floorPosY = 450;
 
 	Input.getInstance().init(canvasElement);
 
-	var player = new Player();
+	var enemyManager = new EnemyManager(floorPosY, width);
+	var player = new Player(floorPosY);
 
 	function update() {
+		if(Input.getInstance().isKeyPressed(81)) {
+			enemyManager.spawnEnemy();
+		}
+
+		enemyManager.update();
 		player.update();
 
 		Input.getInstance().clear();
@@ -20,7 +27,15 @@ function Game() {
 	function draw() {
 		canvas.clearRect(0, 0, width, height);
 
+		enemyManager.draw(canvas);
 		player.draw(canvas);
+
+		//draw groud
+		canvas.beginPath();
+		canvas.moveTo(0, floorPosY);
+		canvas.lineTo(width, floorPosY);
+		canvas.lineWidth = 5;
+		canvas.stroke();
 	}
 
 	this.start = function() {
