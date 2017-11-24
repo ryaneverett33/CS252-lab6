@@ -8,9 +8,15 @@ function EnemyManager(floorPosY, canvasWidth) {
 	}
 
 	this.update = function() {
-		enemies.forEach(function(e) {
-			e.update();
-		});
+		//must start from the end to avoid issues with removing enemy mid-iteration
+		for(var i = enemies.length - 1; i >= 0; i--) {
+			if(enemies[i].centerX < 0 - enemies[i].radius) {
+				enemies.splice(i, 1);
+				continue;
+			}
+
+			enemies[i].update();
+		}
 	}
 
 	this.draw = function(canvas) {
