@@ -11,9 +11,10 @@ http.createServer(function (req, res) {
   //console.log(`${req.method} ${req.url}`);
   //console.log("{0} {1}".format(req.method, req.url));
 	console.log(req.method + " " + req.url);
-  
+  response.writeHead(200, {"Content-Type": "text/plain"});
+	response.end("Shit doesn't work");
   // parse URL
-  const parsedUrl = url.parse(req.url);
+  /*const parsedUrl = url.parse(req.url);
   // extract URL path
   //let pathname = `.${parsedUrl.pathname}`;
   var pathname = "" + parsedUrl.pathname;
@@ -61,7 +62,7 @@ http.createServer(function (req, res) {
         res.end(data);
       }
     });
-  });
+  });*/
 
 
 }).listen(parseInt(port));
