@@ -1,0 +1,14 @@
+{
+    "name": "dinodash",
+    "description": "CS252 Team Project",
+    "version": "0.0.1",
+    "private": true,
+    "license": "",
+    "author": "Changer098",
+    "engines": {
+        "node": ">=6.9.1"
+    },
+    "scripts": {
+        "start": "node server.js"
+    }
+}
