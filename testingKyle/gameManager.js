@@ -14,8 +14,12 @@ function GameManager() {
 	var player = new Player(floorPosY);
 
 	function update() {
-		if(Input.getInstance().isKeyPressed(81)) {
-			enemyManager.spawnEnemy();
+		if(Input.getInstance().isKeyPressed(49)) {
+			enemyManager.spawnFloorEnemy();
+		}
+
+		if(Input.getInstance().isKeyPressed(50)) {
+			enemyManager.spawnArielEnemy();
 		}
 
 		enemyManager.update();
