@@ -3,11 +3,11 @@ var Request = require('tedious').Request
 var TYPES = require('tedious').TYPES;
 
 var config = {  
-  userName: 'yourusername',  
-  password: 'yourpassword',  
-  server: 'yourserver.database.windows.net',   
+  userName: 'dino',  
+  password: 'cs252Purdue',  
+  server: 'dinodb.database.windows.net',   
   options: {
-    encrypt: true, database: 'AdventureWorks'
+    encrypt: true, database: 'DinoDb'
   }  
 };  
 var connection = new Connection(config);

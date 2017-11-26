@@ -3,17 +3,20 @@ var Request = require('tedious').Request
 var TYPES = require('tedious').TYPES;
 
 var config = {  
-  userName: 'yourusername',  
-  password: 'yourpassword',  
-  server: 'yourserver.database.windows.net',   
+  userName: 'dino',  
+  password: 'cs252Purdue',  
+  server: 'dinodb.database.windows.net',   
   options: {
-    encrypt: true, database: 'AdventureWorks'
+    encrypt: true, database: 'DinoDb'
   }  
 };  
 var connection = new Connection(config);
 
 function get(name) { 
-  connection.on('connect', function(err) {  
+  connection.on('connect', function(err) {
+    if (err) {
+      console.log(err);
+    }
     // If no error, then good to proceed.  
     console.log("Connected!");  
     query(name);  
@@ -21,7 +24,7 @@ function get(name) {
 }
 
 function query(name) {  
-  request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name);", function(err) {  
+  request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function(err) {  
   if (err) {  
       console.log(err);}  
   });  
@@ -38,5 +41,8 @@ function query(name) {
   });       
   connection.execSql(request);  
 }  
+
+get("Ric Flair");
+
 
 exports.get = get;
