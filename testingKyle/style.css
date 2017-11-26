@@ -1,0 +1,19 @@
+p {
+	font-family: Sans-serif;
+	font-size: 20px;
+}
+
+p:hover {
+	cursor: pointer;
+}
+
+#canvas {
+	margin: auto;
+	display: block;
+}
+
+.menu {
+	position: absolute;
+	left: 50%;
+	transform: translate(-75%, -400px);
+}
