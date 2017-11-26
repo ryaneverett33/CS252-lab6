@@ -1,21 +1,17 @@
-function Enemy(floorPosY, canvasWidth) {
-	var color = "red";
-	this.radius = 25;
-	this.centerX = 800;
-	this.centerY = floorPosY - this.radius - 10;
+function Enemy(floorPosY, canvasWidth, type) {
+	var color = type == "floor" ? "red" : "green";
+	this.width = 50;
+	var height = 50;
+	this.posX = canvasWidth;
+	var posY = type == "floor" ? floorPosY - height : floorPosY - height - 70;
 	var speed = 5;
 
 	this.update = function() {
-		this.centerX -= 5;
+		this.posX -= 5;
 	}
 
 	this.draw = function(canvas) {
-		canvas.beginPath();
-		canvas.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI, false);
 		canvas.fillStyle = color;
-		canvas.fill();
-		canvas.lineWidth = 5;
-		canvas.strokeStyle = "black";
-		canvas.stroke();
+		canvas.fillRect(this.posX, posY, this.width, height);
 	}
 }
