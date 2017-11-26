@@ -11,6 +11,7 @@ function Enemy(floorPosY, canvasWidth, type) { //type: floor, ariel
 	}
 
 	this.draw = function() {
+
 		canvas.fillStyle = color;
 		canvas.fillRect(this.posX, this.posY, this.width, this.height);
 	}
