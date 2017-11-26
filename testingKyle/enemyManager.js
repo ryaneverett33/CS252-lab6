@@ -15,6 +15,7 @@ function EnemyManager(floorPosY, canvasWidth) {
 		//must start from the end to avoid issues with removing enemy mid-iteration
 		for(var i = enemies.length - 1; i >= 0; i--) {
 			if(enemies[i].posX + enemies[i].width < 0) {
+
 				enemies.splice(i, 1);
 				continue;
 			}
