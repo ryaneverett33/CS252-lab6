@@ -2,7 +2,21 @@ var http = require('http');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
-var gameRoot = "\testingKyle\";
+var gameRoot = "\\testingKyle\\";
+
+String.prototype.replaceAt=function(index, replacement) {
+    return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+}
+
+function rightToLeft(str) {
+	var result = str;
+	for (var i = 0; i < str.length; i++) {
+		if (str[i] == '/') {
+			result = result.replaceAt(i, "\\");
+		}
+	}
+	return result;
+}
 
 var server = http.createServer(function(req, res) {
 	/*var message = "Request: " + request + "\n";
@@ -32,9 +46,43 @@ var server = http.createServer(function(req, res) {
 		'.doc': 'application/msword'
 	  };
 	  var resolvedpath = process.cwd() + gameRoot + pathname;
+	  resolvedpath = rightToLeft(resolvedpath);
 	  console.log("Resolved path: " + resolvedpath);
-	  res.writeHead("content-type: text/plain");
-	  res.end("Resolved path: " + resolvedpath);
+	  
+	  fs.exists(resolvedpath, function(exists) {
+		 if (!exists) {
+			 console.log("File does not exist");
+			 res.statusCode = 404;
+			 res.setHeader('Content-type', 'text/plain' );
+			 res.end("File doesn't exist!");
+			 return;
+		 } 
+		 else {
+			console.log("File exists!");
+			if (fs.statSync(resolvedpath).isDirectory()) {
+				console.log("Is a directory");
+				resolvedpath += "index.html";
+			}
+			//read file
+			fs.readFile(resolvedpath, function(err, data) {
+				if (err) {
+					//send 500
+					res.setHeader('Content-type', 'text/plain' );
+					res.statusCode = 500;
+					res.end("Error getting file: " + err);
+					console.log(err);
+				}
+				else {
+					res.setHeader('Content-type', map[ext] || 'text/plain' );
+					res.end(data);
+				}
+			});
+		 }
+	  });
+	  //res.writeHead(200, {"Content-Type: text/plain"});
+	  /*res.statusCode = 200;
+	  res.setHeader("Content-Type", "text/plain");
+	  res.end("Resolved path: " + resolvedpath);*/
 	  /*fs.exists(resolvedpath, function (exist) {
 		if(!exist) {
 		  // if the file is not found, return 404
