@@ -42,7 +42,4 @@ function query(name) {
   connection.execSql(request);  
 }  
 
-get("Ric Flair");
-
-
 exports.get = get;

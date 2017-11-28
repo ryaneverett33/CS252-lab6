@@ -67,8 +67,4 @@ function query(column, value, name) {
 
 }  
 
-//set("Password", "woooo", "Ric Flair");
-//set("Wins", 1, "Ric Flair");
-set("HighScore", 20, "Ric Flair");
-
 exports.set = set;
