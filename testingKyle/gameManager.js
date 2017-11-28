@@ -2,18 +2,57 @@ function GameManager() {
 	var width = canvasElement.getAttribute("width");
 	var height = canvasElement.getAttribute("height");
 
+	var state; //mainMenu, singlePlayer, singlePlayerDeathMenu
 	var FPS = 60;
 	var floorPosY = 450;
+	var score = 0;
+	var increaseScoreInterval = 1; //seconds
+	var scoreIntervalRet;
 
 	Input.getInstance().init(canvasElement);
 
 	var enemyManager = new EnemyManager(floorPosY, width);
 	var player = new Player(floorPosY);
 
-	function update() {
-		switch(gameState) {
-			case "manu":
+	function increaseScore() {
+		score++;
+		document.getElementById("score").innerHTML = "Score: " + score;
+	}
+
+	this.setState =  function(newState) {
+		state = newState;
+
+		switch(state) {
+			case "mainMenu":
+				document.getElementById("singlePlayerDeathMenu").style.display = "none";
+				document.getElementById("score").style.display = "none";
+				document.getElementById("mainMenu").style.display = "block";
+
 				break;
+			case "singlePlayer":
+				player.posY = floorPosY;
+				player.velY = 0;
+				enemyManager.enemies.length = 0;
+				score = 0;
+				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
+				document.getElementById("score").style.display = "block";
+				document.getElementById("score").innerHTML = "Score: 0";
+				document.getElementById("mainMenu").style.display = "none";
+				document.getElementById("singlePlayerDeathMenu").style.display = "none";
+				canvasElement.focus();
+
+				break;
+			case "singlePlayerDeathMenu":
+				document.getElementById("singlePlayerDeathMenu").style.display = "block";
+				window.clearInterval(scoreIntervalRet);
+
+				break;
+
+		}
+	}
+
+	function update() {
+		switch(state) {
 			case "singlePlayer":
 				if(Input.getInstance().isKeyPressed(49)) {
 					enemyManager.spawnFloorEnemy();
@@ -35,9 +74,7 @@ function GameManager() {
 	}
 
 	this.draw = function() {
-		switch(gameState) {
-			case "menu":
-				break;
+		switch(state) {
 			case "singlePlayer":
 				canvas.clearRect(0, 0, width, height);
 

@@ -18,6 +18,12 @@ p:hover {
 	transform: translate(-75%, -400px);
 }
 
+#score {
+	position: absolute;
+	left: 400px;
+	top: 20px;
+}
+
 .login{
    position:absolute;
    top:4px;

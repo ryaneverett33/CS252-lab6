@@ -2,7 +2,8 @@ function Player(floorPosY) {
 	this.posX = 100;
 	this.posY = floorPosY;
 	var velX =  0;
-	var velY = 0;
+	this.velY = 0;
+
 	this.width = 50;
 	var standHeight = 100;
 	var croutchHeight = 50;
@@ -13,7 +14,7 @@ function Player(floorPosY) {
 
 	this.update = function() {
 		if(onFloor && Input.getInstance().isKeyPressed(38)) {
-			velY = -10;
+			this.velY = -10;
 			onFloor = false;
 		}
 
@@ -22,14 +23,15 @@ function Player(floorPosY) {
 			this.currHeight = croutchHeight;
 		}
 
-		velY += gravity;
+		this.velY += gravity;
 
 		this.posX += velX;
-		this.posY += velY;
+		this.posY += this.velY;
 
 		if(this.posY > floorPosY) {
 			this.posY = floorPosY;
-			velY = 0;
+			this.velY = 0;
+
 			onFloor = true;
 		}
 	}
