@@ -17,3 +17,15 @@ p:hover {
 	left: 50%;
 	transform: translate(-75%, -400px);
 }
+
+.login{
+   position:absolute;
+   top:4px;
+   right:150px;
+}
+
+.create {
+    position:absolute;
+    top:4px;
+    right:4px;
+}
