@@ -3,6 +3,7 @@ function Player(floorPosY) {
 	this.posY = floorPosY;
 	var velX =  0;
 	this.velY = 0;
+
 	this.width = 50;
 	var standHeight = 100;
 	var croutchHeight = 50;
@@ -30,6 +31,7 @@ function Player(floorPosY) {
 		if(this.posY > floorPosY) {
 			this.posY = floorPosY;
 			this.velY = 0;
+
 			onFloor = true;
 		}
 	}

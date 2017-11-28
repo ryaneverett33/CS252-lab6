@@ -23,3 +23,15 @@ p:hover {
 	left: 400px;
 	top: 20px;
 }
+
+.login{
+   position:absolute;
+   top:4px;
+   right:150px;
+}
+
+.create {
+    position:absolute;
+    top:4px;
+    right:4px;
+}

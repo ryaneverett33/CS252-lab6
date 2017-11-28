@@ -10,5 +10,8 @@
     },
     "scripts": {
         "start": "node index.js"
+    },
+    "dependencies": {
+        "tedious-connection-pool": "^1.0.5"
     }
 }

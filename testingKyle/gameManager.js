@@ -98,4 +98,9 @@ function GameManager() {
 			gameManager.draw();
 		}, 1000 / FPS);
 	}
+
+	this.reset = function() {
+		player.posY = floorPosY;
+		enemyManager.enemies.length = 0;
+	}
 }

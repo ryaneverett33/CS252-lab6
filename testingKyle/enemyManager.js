@@ -28,6 +28,7 @@ function EnemyManager(floorPosY, canvasWidth) {
 				gameManager.draw();
 
 				gameManager.setState("singlePlayerDeathMenu");
+
 			}
 		}
 	}
