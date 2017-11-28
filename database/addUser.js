@@ -30,7 +30,7 @@ function add(name, password) {
       return;
     }  
     // If no error, then good to proceed.  
-    console.log("Connection acquired!");  
+    //console.log("Connection acquired!");  
     //table columns: Id, Name, Password, Wins, HighScore (Id is AUTO_INCREMENT, Name is UNIQUE)
     request = new Request("INSERT users (Name, Password, Wins, HighScore) OUTPUT INSERTED.Id VALUES (@Name, @Password, 0, 0);", function(err) {  
     if (err) {  
