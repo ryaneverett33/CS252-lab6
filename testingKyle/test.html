@@ -27,6 +27,8 @@
 		<p id="mainMenuButton">Main menu</p>
 	</div>
 
+	<p id="score">Score: 0</p>
+
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
@@ -35,27 +37,20 @@
 	<script>
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
-		var gameState = "menu"; //menu, singlePlayer, multiplayer
 
 		var gameManager = new GameManager();
+		gameManager.setState("mainMenu");
 
 		document.getElementById("singlePlayerButton").onclick = function() {
-			gameState = "singlePlayer";
-			gameManager.reset();
-			canvasElement.focus();
-			document.getElementById("mainMenu").style.display = "none";
+			gameManager.setState("singlePlayer");
 		};
 
 		document.getElementById("singlePlayerRestartButton").onclick = function() {
-			gameState = "singlePlayer";
-			gameManager.reset();
-			canvasElement.focus();
-			document.getElementById("singlePlayerDeathMenu").style.display = "none";
+			gameManager.setState("singlePlayer");
 		};
 
 		document.getElementById("mainMenuButton").onclick = function() {
-			document.getElementById("singlePlayerDeathMenu").style.display = "none";
-			document.getElementById("mainMenu").style.display = "block";
+			gameManager.setState("mainMenu");
 		};
 
 		gameManager.start();

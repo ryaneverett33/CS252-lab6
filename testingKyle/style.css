@@ -17,3 +17,9 @@ p:hover {
 	left: 50%;
 	transform: translate(-75%, -400px);
 }
+
+#score {
+	position: absolute;
+	left: 400px;
+	top: 20px;
+}

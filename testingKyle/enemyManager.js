@@ -26,10 +26,8 @@ function EnemyManager(floorPosY, canvasWidth) {
 			if(hasCollision(playerPosX, playerWidth, e.posX, e.width, playerPosY, playerHeight, e.posY, e.height)) {
 				//draw one more frame
 				gameManager.draw();
-				
-				gameState = "menu";
-				document.getElementById("singlePlayerDeathMenu").style.display = "block";
 
+				gameManager.setState("singlePlayerDeathMenu");
 			}
 		}
 	}
