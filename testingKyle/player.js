@@ -1,31 +1,41 @@
 function Player(floorPosY) {
-	var posX = 100;
-	var posY = 100;
+	this.posX = 100;
+	this.posY = floorPosY;
 	var velX =  0;
 	var velY = 0;
-	var width = 50;
-	var height = 100;
+	this.width = 50;
+	var standHeight = 100;
+	var croutchHeight = 50;
+	this.currHeight = standHeight;
 	var color = "blue";
 	var gravity = 0.5;
+	var onFloor = false;
 
 	this.update = function() {
-		if(Input.getInstance().isKeyPressed(32)) {
+		if(onFloor && Input.getInstance().isKeyPressed(38)) {
 			velY = -10;
+			onFloor = false;
+		}
+
+		this.currHeight = standHeight;
+		if(Input.getInstance().isKeyHeld(40)) {
+			this.currHeight = croutchHeight;
 		}
 
 		velY += gravity;
 
-		posX += velX;
-		posY += velY;
+		this.posX += velX;
+		this.posY += velY;
 
-		if(posY + height > floorPosY) {
-			posY = floorPosY - height;
+		if(this.posY > floorPosY) {
+			this.posY = floorPosY;
 			velY = 0;
+			onFloor = true;
 		}
 	}
 
-	this.draw = function(canvas) {
+	this.draw = function() {
 		canvas.fillStyle = color;
-		canvas.fillRect(posX, posY, width, height);
+		canvas.fillRect(this.posX, this.posY - this.currHeight, this.width, this.currHeight);
 	}
 }
