@@ -20,31 +20,66 @@ var pool = new ConnectionPool(poolConfig, connectionConfig);
 
 pool.on('error', function(err) {
     console.error(err);
+    return null;
 });
 
-function get(name) { 
+function fillObject(columns) {
+  var obj = {};
+  for (var i = 0; i < columns.length; i++) {
+    var column = columns[i];
+    //console.log("name, value", column.metadata.colName, column.value);
+      obj[column.metadata.colName] = column.value;
+  }
+  return obj;
+}
+
+//calls callback(user object)
+function get(name, callback) { 
   pool.acquire(function (err, connection) {
     if (err) {
       console.log(err);
+      if (callback != null) {
+        callback(null);
+      }
     }
     // If no error, then good to proceed.  
     console.log("Connected!");  
-    request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function(err) {  
-    if (err) {  
-        console.log(err);}  
+    request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function(err, rowcount) {  
+      if (err) {  
+          //console.log('err', err);
+          if (callback != null) {
+            callback(null);
+          }
+      }
+      if (rowcount == 0) {
+        //console.log("AFFECTED 0 rows");
+        if (callback != null) {
+          callback(null);
+        }
+      }
     });  
     request.addParameter('Name', TYPES.NVarChar, name);  
 
     request.on('row', function(columns) {  
-      columns.forEach(function(column) {  
+      /*columns.forEach(function(column) {  
         if (column.value === null) {  
-          console.log('NULL');  
+          console.log('NULL');
         } else {  
-          console.log(column.value);  
+          console.log(column.value);         
         }  
-      });  
-    });       
-    connection.execSql(request);   
+      });
+      console.log(columns[0].value);
+      console.log(columns);
+      if (callback != null) {
+        callback(columns);
+      }*/
+      var user = fillObject(columns);
+      user["name"] = name;
+      if (callback != null) {
+        callback(user);
+      }
+    });
+    connection.execSql(request);
   });  
 }
 

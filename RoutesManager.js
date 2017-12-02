@@ -8,6 +8,8 @@ TO ADD A ROUTE
 Remember to call your delegate method defined here, and not the route handler itself
 */
 var login = require('./routes/login');
+var create = require('./routes/create');
+var example = require('/routes/example');
 var static = require('./routes/static');
 
 exports.login = function(req, res, nex) {
@@ -20,5 +22,9 @@ exports.static = function(req, res, nex) {
 }
 exports.example = function(req, res, nex) {
     console.log("called example");
-    static.login(req, res);
+    example.exampleHandler(req, res);
+}
+exports.create = function(req, res, nex) {
+    console.log("called create user");
+    create.createHandler(req, res);
 }

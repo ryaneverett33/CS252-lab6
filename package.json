@@ -1,18 +1,33 @@
 {
-    "name": "dinodash",
-    "description": "CS252 Team Project",
-    "version": "0.0.1",
-    "private": true,
-    "license": "",
-    "author": "Changer098",
-    "engines": {
-        "node": ">=6.9.1"
-    },
-    "scripts": {
-        "start": "node index.js"
-    },
-    "dependencies": {
-        "node-router": "^0.1.5",
-        "tedious-connection-pool": "^1.0.5"
-    }
+  "name": "dinodash",
+  "description": "CS252 Team Project",
+  "version": "0.0.1",
+  "private": true,
+  "license": "ISC",
+  "author": "Changer098",
+  "engines": {
+    "node": ">=6.9.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "node-router": "^0.1.5",
+    "tedious-connection-pool": "^1.0.5"
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Changer098/CS252-lab6.git"
+  },
+  "keywords": [
+    "cs252",
+    "purdue",
+    "dinodash"
+  ],
+  "bugs": {
+    "url": "https://github.com/Changer098/CS252-lab6/issues"
+  },
+  "homepage": "https://github.com/Changer098/CS252-lab6#readme"
 }

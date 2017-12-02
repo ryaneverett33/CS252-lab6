@@ -6,7 +6,8 @@ var routesManager = require("./RoutesManager.js");
 var server;
 
 function routerInit() {
-	route("POST", "/login", routesManager.login);
+	route("POST", "/user/login", routesManager.login);
+	route("POST", "/user/create", routesManager.create);
 	route(routesManager.static);
 }
 
