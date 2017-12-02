@@ -9,12 +9,15 @@
 <body>
 
 
-	<button type="button" class="btn btn-outline-dark login"  data-toggle="modal" data-target="#loginmodal">
+	<button type="button" id="loginButton" class="btn btn-outline-dark login"  data-toggle="modal" style="display: block;" data-target="#loginmodal">
 	Login
-
 	</button>
 
-	<button type="button" class="btn btn-outline-dark create"  data-toggle="modal" data-target="#createmodal">
+	<button type="button" id="logoutButton" class="btn btn-outline-dark logout" style="display: none;">
+	Logout
+	</button>
+
+	<button type="button" id="createButton" class="btn btn-outline-dark create"  data-toggle="modal" data-target="#createmodal" style="display: block;">
 	Create Account
 	</button>
 
@@ -43,7 +46,7 @@
 				</div>
 				<div class="modal-footer">
 				  <div class="form-control-feedback invisible" id="loginError" style="color: red"></div>  
-				  <button type="button" id="login" class="btn btn-success">Login</button>
+				  <button type="button" id="login" class="btn btn-success" ">Login</button>
 				  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
@@ -65,23 +68,39 @@
 				    <form>
 				      <div class="form-group">
 				        <label for="exampleInputEmail1">Username</label>
-				        <input type="username" class="form-control" id="username_input" placeholder="Enter username">
+				        <input type="username" class="form-control" id="u_input" placeholder="Enter username">
 				      </div>
 				      <div class="form-group">
 				        <label for="exampleInputPassword1">Password</label>
-				        <input type="password" class="form-control" id="password_input" placeholder="Password">
+				        <input type="password" class="form-control" id="p1_input" placeholder="Password">
+				      </div>
+				      <div class="form-group">
+				        <label for="exampleInputPassword1">Re-enter Password</label>
+				        <input type="password" class="form-control" id="p2_input" placeholder="Password">
 				      </div>
 				    </form>
 				  </p>
 				</div>
 				<div class="modal-footer">
-				  <button type="button" class="btn btn-success">Create account</button>
+				  <div class="form-control-feedback invisible" id="CreateError" style="color: red"></div>  
+				  <button type="button" id="create" class="btn btn-success">Create account</button>
 				  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<script>
+		document.getElementById("logoutButton").onclick = function() {
+			//TODO: clear cookie
+			document.getElementById("loginButton").style.display = "block";
+			document.getElementById("logoutButton").style.display = "none";
+			document.getElementById("createButton").style.display = "block";
+
+
+		};		
+	</script>
+		
 
 	<script type="text/javascript">
 		function change() 
@@ -172,5 +191,7 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+	<script src="scriptAccounts.js"></script>
+
 </body>
 </html>
