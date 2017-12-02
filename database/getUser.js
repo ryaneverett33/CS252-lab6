@@ -34,22 +34,25 @@ function get(name) {
         console.log(err);}  
     });  
     request.addParameter('Name', TYPES.NVarChar, name);  
-
+    var obj = {};
     request.on('row', function(columns) {  
       columns.forEach(function(column) {  
-        if (column.value === null) {  
+        /*if (column.value === null) {  
           console.log('NULL');  
-        } else {  
-          console.log(column.value);  
-        }  
+        } else {  */
+          console.log(column.value);
+          obj[column] = column.value;  
+        //}  
       });  
-    });       
-    connection.execSql(request);   
+    });
+
+    request.on('done', function () {
+      connection.release();
+      return obj;
+    });        
+    connection.execSql(request);    
   });  
 }
-
-function query(name) {  
-   
-}  
+ 
 
 exports.get = get;
