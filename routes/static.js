@@ -1,22 +1,32 @@
-var http = require('http');
-var Router = require('node-router');
-var router = Router();
-var route = router.push;
-var routesManager = require("./RoutesManager.js");
-var server;
+var url = require('url');
+var fs = require('fs');
+var path = require('path');
+var gameRoot = "\\testingKyle\\";
 
-function routerInit() {
-	route("POST", "/login", routesManager.login);
-	route(routesManager.static);
+String.prototype.replaceAt=function(index, replacement) {
+    return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
 }
 
-/*var server = http.createServer(function(req, res, rec) {
-	/*var message = "Request: " + request + "\n";
+function rightToLeft(str) {
+	var result = str;
+	for (var i = 0; i < str.length; i++) {
+		if (str[i] == '/') {
+			result = result.replaceAt(i, "\\");
+		}
+	}
+	return result;
+}
+
+/*Serves files request from the client*/
+exports.staticHandler = function(request, response) {
+    /*console.log("called static handler");
+    response.send(200, "Handled via static Handler")*/
+    /*var message = "Request: " + request + "\n";
 	message += "Cwd: " + process.cwd() + "\n";
 	message += "HELLO BITCHES" + "\n";
     response.writeHead(200, {"Content-Type": "text/plain"});
     response.end(message);*/
-	/*var parsedUrl = url.parse(req.url);
+	var parsedUrl = url.parse(request.url);
 	  // extract URL path
 	  //let pathname = `.${parsedUrl.pathname}`;
 	  var pathname = "" + parsedUrl.pathname;
@@ -43,11 +53,10 @@ function routerInit() {
 	  
 	  fs.exists(resolvedpath, function(exists) {
 		 if (!exists) {
-			 router(req,res,rec)
 			 console.log("File does not exist");
-			 res.statusCode = 404;
-			 res.setHeader('Content-type', 'text/plain' );
-			 res.end("File doesn't exist!");
+			 response.statusCode = 404;
+			 response.setHeader('Content-type', 'text/plain' );
+			 response.end("File doesn't exist!");
 			 return;
 		 } 
 		 else {
@@ -60,29 +69,29 @@ function routerInit() {
 			fs.readFile(resolvedpath, function(err, data) {
 				if (err) {
 					//send 500
-					res.setHeader('Content-type', 'text/plain' );
-					res.statusCode = 500;
-					res.end("Error getting file: " + err);
+					response.setHeader('Content-type', 'text/plain' );
+					response.statusCode = 500;
+					response.end("Error getting file: " + err);
 					console.log(err);
 				}
 				else {
-					res.setHeader('Content-type', map[ext] || 'text/plain' );
-					res.end(data);
+					response.setHeader('Content-type', map[ext] || 'text/plain' );
+					response.end(data);
 				}
 			});
 		 }
 	  });
-	  //res.writeHead(200, {"Content-Type: text/plain"});
-	  /*res.statusCode = 200;
-	  res.setHeader("Content-Type", "text/plain");
-	  res.end("Resolved path: " + resolvedpath);*/
+	  //response.writeHead(200, {"Content-Type: text/plain"});
+	  /*response.statusCode = 200;
+	  response.setHeader("Content-Type", "text/plain");
+	  response.end("Resolved path: " + resolvedpath);*/
 	  /*fs.exists(resolvedpath, function (exist) {
 		if(!exist) {
 		  // if the file is not found, return 404
-		  res.statusCode = 404;
-		  //res.end("File {0} not found!".format(pathname));
-		  res.end("File " + pathname + " not found!");
-		  //res.end(`File ${pathname} not found!`);
+		  response.statusCode = 404;
+		  //response.end("File {0} not found!".format(pathname));
+		  response.end("File " + pathname + " not found!");
+		  //response.end(`File ${pathname} not found!`);
 		  return;
 		}
 
@@ -92,20 +101,14 @@ function routerInit() {
 		// read file from file system
 		fs.readFile(resolvedpath, function(err, data){
 		  if(err){
-			res.statusCode = 500;
-			//res.end(`Error getting the file: ${err}.`);
-			res.end("Error getting the file: " + err);
+			response.statusCode = 500;
+			//response.end(`Error getting the file: ${err}.`);
+			response.end("Error getting the file: " + err);
 		  } else {
 			// if the file is found, set Content-type and send data
-			res.setHeader('Content-type', map[ext] || 'text/plain' );
-			res.end(data);
+			response.setHeader('Content-type', map[ext] || 'text/plain' );
+			response.end(data);
 		  }
 		});
-	  });*/
-/*});*/
-routerInit();
-var port = process.env.PORT || 1337;
-server = http.createServer(router);
-server.listen(port);
-
-console.log("Server running at http://localhost:%d", port);
+	  }*/
+}
