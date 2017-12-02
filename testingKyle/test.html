@@ -19,67 +19,84 @@
 	</button>
 
 	<div class="modal" id="loginmodal" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-	<div class="modal-content">
-	<div class="modal-header">
-	  <h5 class="modal-title">Login</h5>
-	  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	</div>
-	<div class="modal-body">
-	  <p>
-	    <form>
-	      <div class="form-group">
-	        <label for="exampleInputEmail1">Username</label>
-	        <input type="username" class="form-control" id="username_input" placeholder="Enter username">
-	      </div>
-	      <div class="form-group">
-	        <label for="exampleInputPassword1">Password</label>
-	        <input type="password" class="form-control" id="password_input" placeholder="Password">
-	      </div>
-	    </form>
-	  </p>
-	</div>
-	<div class="modal-footer">
-	  <button type="button" class="btn btn-success">Login</button>
-	  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-	</div>
-	</div>
-	</div>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title">Login</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				    <span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+				<div class="modal-body">
+				  <p>
+				    <form>
+				      <div class="form-group">
+				        <label for="exampleInputEmail1">Username</label>
+				        <input type="username" class="form-control" id="username_input" placeholder="Enter username">
+				      </div>
+				      <div class="form-group">
+				        <label for="exampleInputPassword1">Password</label>
+				        <input type="password" class="form-control" id="password_input" placeholder="Password">
+				      </div>
+				    </form>
+				  </p>
+				</div>
+				<div class="modal-footer">
+				  <div class="form-control-feedback invisible" id="loginError" style="color: red"></div>  
+				  <button type="button" id="login" class="btn btn-success">Login</button>
+				  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 
 	<div class="modal" id="createmodal" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-	<div class="modal-content">
-	<div class="modal-header">
-	  <h5 class="modal-title">Create Account</h5>
-	  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title">Create Account</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				    <span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+				<div class="modal-body">
+				  <p>
+				    <form>
+				      <div class="form-group">
+				        <label for="exampleInputEmail1">Username</label>
+				        <input type="username" class="form-control" id="username_input" placeholder="Enter username">
+				      </div>
+				      <div class="form-group">
+				        <label for="exampleInputPassword1">Password</label>
+				        <input type="password" class="form-control" id="password_input" placeholder="Password">
+				      </div>
+				    </form>
+				  </p>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-success">Create account</button>
+				  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="modal-body">
-	  <p>
-	    <form>
-	      <div class="form-group">
-	        <label for="exampleInputEmail1">Username</label>
-	        <input type="username" class="form-control" id="username_input" placeholder="Enter username">
-	      </div>
-	      <div class="form-group">
-	        <label for="exampleInputPassword1">Password</label>
-	        <input type="password" class="form-control" id="password_input" placeholder="Password">
-	      </div>
-	    </form>
-	  </p>
-	</div>
-	<div class="modal-footer">
-	  <button type="button" class="btn btn-success">Create account</button>
-	  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-	</div>
-	</div>
-	</div>
-	</div>
+
+
+	<script type="text/javascript">
+		function change() 
+			{
+			    var elem = document.getElementById("myButton1");
+			    if (elem.value=="Close Curtain") elem.value = "Open Curtain";
+			    else elem.value = "Close Curtain";
+			}
+	</script>
+
+
+
+
+
+
 
 
 	<div id="container">
