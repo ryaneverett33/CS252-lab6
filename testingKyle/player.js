@@ -3,6 +3,7 @@ function Player(floorPosY) {
 	this.posY = floorPosY;
 	var velX =  0;
 	this.velY = 0;
+	var jumpVel = 12;
 
 	this.width = 50;
 	var standHeight = 100;
@@ -14,7 +15,7 @@ function Player(floorPosY) {
 
 	this.update = function() {
 		if(onFloor && Input.getInstance().isKeyPressed(38)) {
-			this.velY = -10;
+			this.velY = -jumpVel;
 			onFloor = false;
 		}
 

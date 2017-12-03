@@ -17,6 +17,11 @@ function GameManager() {
 	function increaseScore() {
 		score++;
 		document.getElementById("score").innerHTML = "Score: " + score;
+
+		if(score % 10 == 0 && score < 60) {
+			enemyManager.speed += 2;
+			enemyManager.minTime -= 200;
+		}
 	}
 
 	this.setState =  function(newState) {
@@ -32,7 +37,7 @@ function GameManager() {
 			case "singlePlayer":
 				player.posY = floorPosY;
 				player.velY = 0;
-				enemyManager.enemies.length = 0;
+				enemyManager.init();
 				score = 0;
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
 				document.getElementById("score").style.display = "block";
@@ -54,14 +59,6 @@ function GameManager() {
 	function update() {
 		switch(state) {
 			case "singlePlayer":
-				if(Input.getInstance().isKeyPressed(49)) {
-					enemyManager.spawnFloorEnemy();
-				}
-
-				if(Input.getInstance().isKeyPressed(50)) {
-					enemyManager.spawnArielEnemy();
-				}
-
 				enemyManager.update(player.posX, player.posY - player.currHeight, player.width, player.currHeight);
 				player.update();
 

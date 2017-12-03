@@ -47,17 +47,18 @@ function get(name, callback) {
       }
     });  
     request.addParameter('Name', TYPES.NVarChar, name);  
-
+    var obj = {};
     request.on('row', function(columns) {  
       /*columns.forEach(function(column) {  
-        if (column.value === null) {  
-          console.log('NULL');
-        } else {  
-          console.log(column.value);         
+        /*if (column.value === null) {  
+          console.log('NULL');  
+        } else {
+          console.log(column.value);
+          obj[column] = column.value;  
         }  
-      });
-      console.log(columns[0].value);
-      console.log(columns);
+      });*/
+      //console.log(columns[0].value);
+      //console.log(columns);
       if (callback != null) {
         callback(columns);
       }*/
@@ -72,9 +73,6 @@ function get(name, callback) {
     connection.execSql(request);
   });  
 }
-
-function query(name) {  
-   
-}  
+ 
 
 exports.get = get;

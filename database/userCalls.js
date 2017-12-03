@@ -13,9 +13,13 @@ var deleteUser = require("./deleteUser");
 //setUser.set("HighScore", 33, "Ric Flair");
 //setUser.set("HighScore", 41, "Ric Flair");
 //setUser.set("Wins", 1, "Clint Eastwood");
-getUser.get("Clint Eastwood");
-getUser.get("Clint Eastwood");
-getUser.get("Clarence");/*
+var u1 = getUser.get("Clint Eastwood");
+var u2 = getUser.get("Clint Eastwood");
+var u3 = getUser.get("Clarence");
+console.log(u1);
+console.log(u2);
+console.log(u3);
+/*
 setUser.set("Wins", 1, "Ric Flair");
 setUser.set("HighScore", 2, "Ric Flair");
 getUser.get("Ric Flair");

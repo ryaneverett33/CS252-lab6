@@ -4,9 +4,8 @@ function Enemy(floorPosY, canvasWidth, type) { //type: floor, ariel
 	this.height = 50;
 	this.posX = canvasWidth;
 	this.posY = type == "floor" ? floorPosY - this.height : floorPosY - this.height - 70;
-	var speed = 5;
 
-	this.update = function() {
+	this.update = function(speed) {
 		this.posX -= speed;
 	}
 
