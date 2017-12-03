@@ -46,7 +46,6 @@ function handleCallback(callback, value) {
 }
 //callback(cookie)
 exports.login = function (username, password, callback) {
-    console.log("Username %s, password: %s", username, password);
     if (username === null || password === null) {
         console.log("invalid arguments");
         //handleCallback(callback, 0);
