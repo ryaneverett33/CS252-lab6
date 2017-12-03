@@ -3,7 +3,10 @@ var Router = require('node-router');
 var router = Router();
 var route = router.push;
 var routesManager = require("./RoutesManager.js");
+var pool = require("./database/pool.js");
 var server;
+
+"use strict";
 
 function routerInit() {
 	route("POST", "/user/login", routesManager.login);
@@ -105,6 +108,7 @@ function routerInit() {
 	  });*/
 /*});*/
 routerInit();
+pool.init();
 var port = process.env.PORT || 1337;
 server = http.createServer(router);
 server.listen(port);

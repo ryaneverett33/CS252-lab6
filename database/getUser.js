@@ -1,27 +1,6 @@
-var ConnectionPool = require('tedious-connection-pool');var Request = require('tedious').Request  
+var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
-
-var poolConfig = {
-    min: 2,
-    max: 4,
-    log: true
-};
-
-var connectionConfig = {  
-  userName: 'dino',  
-  password: 'cs252Purdue',  
-  server: 'dinodb.database.windows.net',   
-  options: {
-    encrypt: true, database: 'DinoDb'
-  }  
-};
-
-var pool = new ConnectionPool(poolConfig, connectionConfig);
-
-pool.on('error', function(err) {
-    console.error(err);
-    return null;
-});
+var pool = require('./pool.js');
 
 function fillObject(columns) {
   var obj = {};
@@ -35,27 +14,36 @@ function fillObject(columns) {
 
 //calls callback(user object)
 function get(name, callback) { 
-  pool.acquire(function (err, connection) {
+  pool.get(function (err, connection) {
     if (err) {
       console.log(err);
       if (callback != null) {
+        pool.release(connection);
         callback(null);
+        return;
       }
     }
     // If no error, then good to proceed.  
     console.log("Connected!");  
     request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function(err, rowcount) {  
       if (err) {  
-          //console.log('err', err);
+          console.log('err', err);
           if (callback != null) {
+            pool.release(connection);
             callback(null);
+            return;
           }
       }
       if (rowcount == 0) {
-        //console.log("AFFECTED 0 rows");
+        console.log("AFFECTED 0 rows");
         if (callback != null) {
+          pool.release(connection);
           callback(null);
+          return;
         }
+      }
+      else {
+        pool.release(connection);
       }
     });  
     request.addParameter('Name', TYPES.NVarChar, name);  
@@ -76,7 +64,9 @@ function get(name, callback) {
       var user = fillObject(columns);
       user["name"] = name;
       if (callback != null) {
+        console.log("Returning ", user);
         callback(user);
+        return;
       }
     });
     connection.execSql(request);

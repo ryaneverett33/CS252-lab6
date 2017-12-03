@@ -7,14 +7,21 @@ TO ADD A ROUTE
 4. Add the route in index.initRouter() with the proper route (https://www.npmjs.com/package/node-router#route-chaining)
 Remember to call your delegate method defined here, and not the route handler itself
 */
-var login = require('./routes/login');
-var create = require('./routes/create');
-var example = require('/routes/example');
-var static = require('./routes/static');
+var login = require('./routes/login.js');
+var create = require('./routes/create.js');
+var example = require('./routes/example.js');
+var static = require('./routes/static.js');
 
 exports.login = function(req, res, nex) {
     console.log("called login");
-    login.loginHandler(req, res);
+    let body = [];
+    req.on('data', (chunk) => {
+        body.push(chunk);
+    }).on('end', () => {
+        body = Buffer.concat(body).toString();
+        // at this point, `body` has the entire request body stored in it as a string
+        login.loginHandler(req, res, body);
+    });
 }
 exports.static = function(req, res, nex) {
     console.log("called static");

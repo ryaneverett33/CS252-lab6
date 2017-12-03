@@ -12,6 +12,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "body": "^5.1.0",
     "node-router": "^0.1.5",
     "tedious-connection-pool": "^1.0.5"
   },
