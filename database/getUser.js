@@ -1,56 +1,76 @@
-var ConnectionPool = require('tedious-connection-pool');var Request = require('tedious').Request  
+var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
+var pool = require('./pool.js');
 
-var poolConfig = {
-    min: 2,
-    max: 4,
-    log: true
-};
+function fillObject(columns) {
+  var obj = {};
+  for (var i = 0; i < columns.length; i++) {
+    var column = columns[i];
+    //console.log("name, value", column.metadata.colName, column.value);
+      obj[column.metadata.colName] = column.value;
+  }
+  return obj;
+}
 
-var connectionConfig = {  
-  userName: 'dino',  
-  password: 'cs252Purdue',  
-  server: 'dinodb.database.windows.net',   
-  options: {
-    encrypt: true, database: 'DinoDb'
-  }  
-};
-
-var pool = new ConnectionPool(poolConfig, connectionConfig);
-
-pool.on('error', function(err) {
-    console.error(err);
-});
-
-function get(name) { 
-  pool.acquire(function (err, connection) {
+//calls callback(user object)
+function get(name, callback) { 
+  pool.get(function (err, connection) {
     if (err) {
       console.log(err);
+      if (callback != null) {
+        pool.release(connection);
+        callback(null);
+        return;
+      }
     }
     // If no error, then good to proceed.  
     console.log("Connected!");  
-    request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function(err) {  
-    if (err) {  
-        console.log(err);}  
+    request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function(err, rowcount) {  
+      if (err) {  
+          console.log('err', err);
+          if (callback != null) {
+            pool.release(connection);
+            callback(null);
+            return;
+          }
+      }
+      if (rowcount == 0) {
+        console.log("AFFECTED 0 rows");
+        if (callback != null) {
+          pool.release(connection);
+          callback(null);
+          return;
+        }
+      }
+      else {
+        pool.release(connection);
+      }
     });  
     request.addParameter('Name', TYPES.NVarChar, name);  
     var obj = {};
     request.on('row', function(columns) {  
-      columns.forEach(function(column) {  
+      /*columns.forEach(function(column) {  
         /*if (column.value === null) {  
           console.log('NULL');  
-        } else {  */
+        } else {
           console.log(column.value);
           obj[column] = column.value;  
-        //}  
-      });  
+        }  
+      });*/
+      //console.log(columns[0].value);
+      //console.log(columns);
+      if (callback != null) {
+        callback(columns);
+      }*/
+      var user = fillObject(columns);
+      user["name"] = name;
+      if (callback != null) {
+        console.log("Returning ", user);
+        callback(user);
+        return;
+      }
     });
-
-    request.on('done', function () {
-      connection.release();
-      return obj;
-    });        
-    connection.execSql(request);    
+    connection.execSql(request);
   });  
 }
  
