@@ -28,7 +28,7 @@ exports.createHandler = function(req, res, body) {
     console.log("called createHandler");
     var json;
     try {
-        json = JSON.parse(body)
+        json = JSON.parse(body);
         if (json == null || json === null) {
             res.setHeader("content-type", "application/json");
             res.send(400, JSON.stringify({ error: "Bad JSON" }));
