@@ -61,7 +61,7 @@ function get(name, callback) {
       //console.log(columns);
       if (callback != null) {
         callback(columns);
-      }*/
+      }
       var user = fillObject(columns);
       user["name"] = name;
       if (callback != null) {
