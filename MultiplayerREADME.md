@@ -12,8 +12,8 @@ Returns: TBD
  Retrieves the next state of the board so that each player has  an identical copy of the board. Board.get should be called  until the game ends. This returns a buffer of enemies to be spawned by the client. It only needs to be called when the player is close to the end of the buffer.
  
 Returns: TBD
-#### Match.start, leave, getPlayers
-Start
+#### Match.findGame, joinGame, leave, getPlayers
+findGame
 
 Starts the matchmaking process and finds another player to join the match. 
 
@@ -22,6 +22,10 @@ Returns:
 { "matchid" : "string(4 letters)" }
 ```
 The matchid can allow anybody to join the game with the given code or just wait for an automatic match to happen.
+
+joinGame
+
+Joins a match with the given room id
 
 Leave
 
