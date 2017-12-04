@@ -166,11 +166,15 @@
 		document.getElementById("multiPlayerButton").onclick = function() {
 				//connect to socket on backend
 				var socket = io.connect('http://dinodash.azurewebsites.net');
+				var room;
 				//once socket is connected, find a game (code on server.js)
 				socket.on('connect', function(){
 				    socket.emit('find_game');
 				});
 
+				socket.on('room_id', function(room_id) {
+					room = room_id
+				})
 				socket.on('created_room', function() {
 					//TODO: tell user "waiting for opponent"
 				})
@@ -178,6 +182,10 @@
 				socket.on('startgame', function() {
 					//TODO: start the game
 				})
+				/*
+				if game is over...
+				room.on('leave', room);
+				*/
 				//TODO: implement sending data to backend
 		};
 

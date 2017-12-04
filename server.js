@@ -85,7 +85,7 @@ io.sockets.on('connection', function(socket) {
       //look for available room, if none found, create a new one
       if (typeof rooms[0] !== 'undefined' && rooms[0] !== null) {
         socket.join(rooms[0])
-
+        room.emit('room_id', "room-"+room_no);  //send to clients in room
         //emit start game to both players (startgame will have calls to get data)
         io.sockets.in(rooms[0]).emit('startgame');
 
@@ -96,10 +96,13 @@ io.sockets.on('connection', function(socket) {
         socket.join("room-"+room_no);  //client joins new room
         rooms.push("room-"+room_no);  //add to rooms array
         var room = io.sockets.in("room-"+room_no);
-        room.emit('created_room', "Waiting for an opponent");  //send to clients in room
-        room.on('leave', fucntion() {
+        socket.on('created_room');
+
+        room.on('leave', function(room) {
           //someone left the room, end the game
           //TODO: do that
+      	  var index = rooms.indexOf(room);
+      	  rooms.splice(index, 1);    
         });
         room_no++;
       }
