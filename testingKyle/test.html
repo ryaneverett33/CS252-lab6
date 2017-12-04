@@ -130,7 +130,7 @@
 
 	<div class="menu" id="mainMenu">
 		<p id="singlePlayerButton">Single player</p>
-		<p>Multiplayer</p>
+		<p id="multiPlayerButton">Multiplayer</p>
 		<p>Options</p>
 	</div>
 
@@ -151,6 +151,7 @@
 	<script src="enemyManager.js"></script>
 	<script src="player.js"></script>
 	<script src="gameManager.js"></script>
+	<script src="socket.io/socket.io.js"></script>
 	<script>
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
@@ -161,6 +162,26 @@
 		document.getElementById("singlePlayerButton").onclick = function() {
 			gameManager.setState("singlePlayer");
 		};
+
+		document.getElementById("multiPlayerButton").onclick = function() {
+				//connect to socket on backend
+				var socket = io.connect('http://dinodash.azurewebsites.net');
+				//once socket is connected, find a game (code on server.js)
+				socket.on('connect', function(){
+				    socket.emit('find_game');
+				});
+
+				socket.on('created_room', function() {
+					//TODO: tell user "waiting for opponent"
+				})
+
+				socket.on('startgame', function() {
+					//TODO: start the game
+				})
+				//TODO: implement sending data to backend
+		};
+
+
 
 		document.getElementById("singlePlayerRestartButton").onclick = function() {
 			gameManager.setState("singlePlayer");

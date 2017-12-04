@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const port = process.argv[2] || 9000;
 var gameRoot = "/testingKyle/";
+var io = require('socket.io')(http);
+
 
 //C:\Users\Ryan\Repositories\CS252-lab6\testingKyle
 
@@ -66,6 +68,45 @@ http.createServer(function (req, res) {
 
 
 }).listen(parseInt(port));
+
+/***Socket IO backend***/
+
+/*
+look for available room
+if room exists, join
+otherwise create room
+if user leaves room, count that as the end of the game, add a win to user still in lobby
+*/
+
+var rooms = [];  //all rooms to handle multiplayer games
+var room_no = 1;  //used to create new room names
+io.sockets.on('connection', function(socket) {
+  socket.on('find_game', function() {
+      //look for available room, if none found, create a new one
+      if (typeof rooms[0] !== 'undefined' && rooms[0] !== null) {
+        socket.join(rooms[0])
+
+        //emit start game to both players (startgame will have calls to get data)
+        io.sockets.in(rooms[0]).emit('startgame');
+
+        //now that there are two people in the room, remove room from array
+        rooms = rooms.shift();
+      } else {
+        //create new room for users to join
+        socket.join("room-"+room_no);  //client joins new room
+        rooms.push("room-"+room_no);  //add to rooms array
+        var room = io.sockets.in("room-"+room_no);
+        room.emit('created_room', "Waiting for an opponent");  //send to clients in room
+        room.on('leave', fucntion() {
+          //someone left the room, end the game
+          //TODO: do that
+        });
+        room_no++;
+      }
+  });
+});
+
+
 
 //console.log(`Server listening on port ${port}`);
 console.log("Server listening on port", port);
