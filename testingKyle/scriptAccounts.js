@@ -1,6 +1,5 @@
 $(document).ready(function(){
 	var cookie = document.cookie.split("=")[1];
-
 	/**
 	 * Login button function
 	 */
@@ -22,6 +21,7 @@ $(document).ready(function(){
 				var json = JSON.parse(recieved);
 				if(request.status === 200) { //200 status = success
 					$("#loginmodal").modal("hide");
+					storeCookie(json.cookie);
 					document.getElementById("loginButton").style.display = "none";
 					document.getElementById("logoutButton").style.display = "block";
 					document.getElementById("createButton").style.display = "none";
@@ -35,11 +35,7 @@ $(document).ready(function(){
 				}
 			});
 			request.open("POST", "http://dinodash.azurewebsites.net/user/login");
-			request.send(JSON.stringify({ "username": userName, "password": passWord }));
-			
-
-
-			
+			request.send(JSON.stringify({ "username": userName, "password": passWord }));		
 		}
 	});
 
@@ -81,7 +77,7 @@ $(document).ready(function(){
 					var recieved = this.responseText;
 					if(request.status == 200) { //Valid registration, continue
 						var json = JSON.parse(recieved);
-						storeLoginCookie(json.cookie);
+						storeCookie(json.cookie);
 						$("#createmodal").modal("hide");
 						document.getElementById("loginButton").style.display = "none";
 						document.getElementById("logoutButton").style.display = "block";
@@ -101,4 +97,17 @@ $(document).ready(function(){
 			}
 		}
 	});
+	function storeCookie(cookie) {
+		if (cookie == 0) {
+			return;
+		}
+		var time = new Date();
+		time.setFullYear(1 + time.getFullYear());          //Expire in a year
+		var date = time.toUTCString();
+		//var cookiestring = "_schedlogin={0}; expires={1};path=/".format(cookie, date);
+		var chipsahoy = "cookie=" + cookie +"; expires=" + date + ";path=/";
+		document.cookie = chipsahoy;
+		
+	}
+
 });
