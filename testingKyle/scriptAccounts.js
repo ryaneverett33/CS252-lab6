@@ -102,9 +102,8 @@ $(document).ready(function(){
 			return;
 		}
 		var time = new Date();
-		time.setFullYear(1 + time.getFullYear());          //Expire in a year
+		time.setFullYear(1 + time.getFullYear());  //expires in a year
 		var date = time.toUTCString();
-		//var cookiestring = "_schedlogin={0}; expires={1};path=/".format(cookie, date);
 		var chipsahoy = "cookie=" + cookie +"; expires=" + date + ";path=/";
 		document.cookie = chipsahoy;
 		
