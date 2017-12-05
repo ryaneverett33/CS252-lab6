@@ -135,16 +135,58 @@ function getRoom(roomid) {
     }
     return currentGames[roomid];
 }
+//actionObj { "roomid" : int, "username" : string, "action" : "jump|duck|hit"}
+function handlePlayerAction(socket, actionObj) {
+    //get match 
+    console.log("Recieved: " + actionObj);
+    if (actionObj.roomid == null) {
+        socket.emit("Player.error", { error : "Roomid is invalid"});
+        return;
+    }
+    var match = getRoom(actionObj.roomid);
+    if (match == null) {
+        socket.emit("Player.error", { error : "Roomid is invalid"});
+        return;
+    }
+    match.handlePlayerAction(socket, actionObj);
+}
+//boardObj { "roomid" : int, "distance" : int}
+function getBoard(socket, boardObj) {
+    console.log("Recieved: " + boardObj);
+    if (actionObj.roomid == null) {
+        socket.emit("Match.error", { error : "Roomid is invalid"});
+        return;
+    }
+    var match = getRoom(boardObj.roomid);
+    if (match == null) {
+        socket.emit("Match.error", { error : "Roomid is invalid"});
+        return;
+    }
+    match.getBoard(boardObj);
+}
 exports.init = function(io) {
     socketobj = io;
     io.sockets.on('connection', function(socket) {
+        console.log("Connected");
         //Handles creating a new game and 
         socket.on('Match.findGame', function(gameObj) {
             findGame(gameObj, socket);
         });
+        socket.on('Player.jump', function(actionObj) {
+            handlePlayerAction(socket, actionObj);
+        });
+        socket.on('Player.duck', function(actionObj) {
+            handlePlayerAction(socket, actionObj);
+        });
+        socket.on('Player.hit', function(actionObj) {
+            handlePlayerAction(socket, actionObj);
+        });
+        socket.on('Match.getBoard', function(distanceObj) {
+
+        })
         //When the user disconnects, perform this
         socket.on('disconnect', function() {
-            
+            console.log("Disconnected");
         });
     });
 };

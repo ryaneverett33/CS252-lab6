@@ -1,3 +1,5 @@
+var boardmaker = require('./board.js');
+
 function match(roomid, MAXPLAYERS) {
     console.log("Creating match: %d with maxplayers: %d", roomid, MAXPLAYERS);
     this.roomid = roomid;
@@ -5,6 +7,7 @@ function match(roomid, MAXPLAYERS) {
     this.players = [];
     this.playerCount = 0;
     this.MAXPLAYERS = MAXPLAYERS;
+    this.board = boardmaker.board(99);
     //States: 0 - waiting to start, 1 playing, 2 gameover
     this.currentState = 0
     //returns a boolean if the room contains the user or not
@@ -90,15 +93,79 @@ function match(roomid, MAXPLAYERS) {
             players : this.getUsernames()
         };
     }
+    // TBD
+    this.getBoardObj = function(startIndex) {
+        throw "NotImplemented";
+    }
+    //Send signal of type type to every player
+    //returns nothing
+    this.sendToPlayers = function(type,obj) {
+        if (type == null || obj == null) {
+            console.log("match.sendToPlayers was given invalid arguments");
+            return;
+        }
+        for (var i = 0; i < this.playerCount; i++) {
+            var playersocket = this.players[i].socket;
+            playersocket.emit(type, obj);
+        }
+    }
+    //Sends signal of type type to all players except for player
+    //Returns nothing
+    this.sendToPlayers = function(username, type, obj) {
+        if (username == null || type == null || obj == null) {
+            console.log("match.sendToPlayers(player) was given invalid arguments");
+            return;
+        }
+        for (var i = 0; i < this.playerCount; i++) {
+            var player = this.players[i];
+            if (player.username === username) {
+                continue;
+            }
+            var playersocket = player.socket;
+            playersocket.emit(type, obj);
+        }
+    }
+    //actionObj { "roomid" : int, "username" : string, "action" : "jump|duck|hit"}
+    //Socket is the socket of the sender
+    this.handlePlayerAction = function (socket, actionObj) {
+        if (actionObj.username == null) {
+            socket.emit("Player.error", { error: "Invalid username" });
+            return;
+        }
+        if (actionObj.action == null) {
+            socket.emit("Player.error", { error: "Invalid Player Action" });
+            return;
+        }
+        var valid = actionObj.action.toLowerCase() === "jump";
+        valid = valid || actionObj.action.toLowerCase() === "duck";
+        valid = valid || actionObj.action.toLowerCase() === "hit";
+        if (valid) {
+            this.sendToPlayers(actionObj.username, "Match.playerUpdate", {
+                username : actionObj.username,
+                action : actionObj.action
+            });
+        }
+        else {
+            socket.emit("Player.error", { error: "Invalid Player Action" });
+            return;
+        }
+    }
+    //boardObj { "roomid" : int, "distance" : int}
+    this.getBoard = function(socket, boardObj) {
+        if (boardObj.distance == null || boardObj.distance < 0) {
+            socket.emit('Match.error', { error : "Invalid board distance" })
+        }
+        else {
+            socket.emit('Match.boardUpdate', board.getSegment(boardObj.distance));
+        }
+    }
     //Sends a start signal to all the players and initalizes the board
     //Start obj : {roomid: int, playerCount: int, players: [usernames]}
     this.start = function() {
-        for (var i = 0; i < this.playerCount; i++) {
-            //tell each player to start the game
-            var playersocket = this.players[i].socket;
-            playersocket.emit('Server.startMatch', this.getMatchObj());
-        }
         //initalize the board
+        //Generate start obj with board info and match info
+        //Tell players the match has started
+        this.sendToPlayers('Server.startMatch', this.getMatchObj);
     }
 }
 exports.match = match;
