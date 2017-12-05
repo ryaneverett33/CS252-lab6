@@ -20,6 +20,6 @@ pool.init();
 var port = process.env.PORT || 1337;
 server = http.createServer(router);
 server.listen(port);
-io.listen(server);
+var io = require("socket.io")(server);
 iomanager.init(io);
 console.log("Server running at http://localhost:%d", port);
