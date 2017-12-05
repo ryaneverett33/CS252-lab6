@@ -91,7 +91,7 @@ function findOpenRoom(roomid) {
 // Match.foundGame : {error : string} | {roomid : int}
 function findGame(gameObj, socket) {
     if (gameObj.username == null) {
-        socket.emit('Match.foundGame', {
+        socket.emit('Match.error', {
             error : "Invalid Arguments"
         });
     }
@@ -100,7 +100,7 @@ function findGame(gameObj, socket) {
     if (match == null) {
         console.log("Did not find open room");
         //couldn't find a match
-        socket.emit('Match.foundGame', {
+        socket.emit('Match.error', {
             error : "Couldn't find match with given roomid"
         });
         return;
@@ -121,7 +121,7 @@ function findGame(gameObj, socket) {
         }
         else {
             console.log("Failed to join match");
-            socket.emit('Match.foundGame', {
+            socket.emit('Match.error', {
                 error : "Failed to join match"
             });
             return;
