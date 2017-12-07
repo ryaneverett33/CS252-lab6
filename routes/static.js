@@ -48,7 +48,8 @@ exports.staticHandler = function(request, response) {
 		'.doc': 'application/msword'
 	  };
 	  var resolvedpath = process.cwd() + "/testingKyle" + pathname;
-	  //resolvedpath = rightToLeft(resolvedpath);
+	  resolvedpath = rightToLeft(resolvedpath);
+
 	  console.log("Resolved path: " + resolvedpath);
 	  
 	  fs.exists(resolvedpath, function(exists) {
