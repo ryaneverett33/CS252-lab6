@@ -1,7 +1,7 @@
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
-var gameRoot = "\\testingKyle\\";
+var gameRoot = "\\app\\";
 
 String.prototype.replaceAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
@@ -75,7 +75,7 @@ exports.staticHandler = function(request, response) {
 					console.log(err);
 				}
 				else {
-					response.setHeader('Content-type', map[ext] || 'text/plain' );
+					response.setHeader('Content-type', map[ext] || 'text/html' );
 					response.end(data);
 				}
 			});

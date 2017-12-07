@@ -47,7 +47,9 @@ function EnemyManager(floorPosY, canvasWidth) {
 
 			e.update(that.speed);
 
-			if(hasCollision(playerPosX, playerWidth, e.posX, e.width, playerPosY, playerHeight, e.posY, e.height)) {
+			var enemyBB = e.getBoundingBox();
+
+			if(hasCollision(playerPosX, playerWidth, enemyBB.posX, enemyBB.width, playerPosY, playerHeight, enemyBB.posY, enemyBB.height)) {
 				//draw one more frame
 				gameManager.draw();
 

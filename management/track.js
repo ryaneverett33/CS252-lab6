@@ -8,6 +8,9 @@ Will probably also handle matchmaking
 */
 //[cookie] = username
 var users = {};
+//[username] = roomid
+var players = {};
+
 //reserves spots [-10,10] for error results
 function makeCookie() {
     var number;

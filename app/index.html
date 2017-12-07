@@ -157,6 +157,7 @@
 	<script>
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
+		canvas.imageSmoothingEnabled = false;
 
 		var gameManager = new GameManager();
 		gameManager.setState("mainMenu");
