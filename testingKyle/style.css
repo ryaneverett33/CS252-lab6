@@ -21,8 +21,8 @@ p:hover {
 
 #score {
 	position: absolute;
-	left: 400px;
-	top: 20px;
+	left: 50%;
+	transform: translate(-75%, -500px);
 }
 
 .login{
