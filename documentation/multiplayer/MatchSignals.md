@@ -14,7 +14,17 @@ Success: Match.foundGame
 
 Error: Match.error
 ### Match.leave C
-TBD
+#### Request
+```json
+{
+	"roomid" : int,
+	"username" : string
+}
+```
+Kills the player (username) in match (roomid). If the game is a two person game (which is most likely is), the game will be ended.
+
+Success: Player.dead, Server.endMatch
+Error: Player.error
 ### Match.getPlayers C
 TBD
 ### Match.getBoard C
@@ -68,3 +78,11 @@ When a client sends a Player.jump|duck|hit, the other clients in the room will r
 }
 ```
 Describes an error that occurred with a previous request.
+### Match.players S
+#### Response
+```json
+[
+	"username",
+]
+```
+Returns an array of all the players (usernames) in the match.
