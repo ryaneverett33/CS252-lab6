@@ -118,6 +118,7 @@
 
 
 
+
 	<div id="container">
 		<canvas
 			id="canvas"
@@ -143,15 +144,16 @@
 		<p id="singlePlayerRestartButton">Restart</p>
 		<p id="mainMenuButton">Main menu</p>
 	</div>
-
+	<p id="hs">Highscore: 0</p>
 	<p id="score">Score: 0</p>
+	<p id="wins">Wins: 0</p>
 
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
 	<script src="player.js"></script>
 	<script src="gameManager.js"></script>
-	<script src="socket.io/socket.io.js"></script>
+	<!--<script src="socket.io/socket.io.js"></script></!-->
 	<script>
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");

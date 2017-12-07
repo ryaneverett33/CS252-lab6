@@ -11,6 +11,8 @@ var server;
 function routerInit() {
 	route("POST", "/user/login", routesManager.login);
 	route("POST", "/user/create", routesManager.create);
+	route("POST", "/user/get", routesManager.get);
+	route("POST", "/user/set", routesManager.set);
 	route(routesManager.static);
 }
 
