@@ -111,9 +111,9 @@ function match(roomid, MAXPLAYERS) {
     }
     //Sends signal of type type to all players except for player
     //Returns nothing
-    this.sendToPlayers = function(username, type, obj) {
+    this.sendToPlayersExcept = function(username, type, obj) {
         if (username == null || type == null || obj == null) {
-            console.log("match.sendToPlayers(player) was given invalid arguments");
+            console.log("match.sendToPlayersExcept was given invalid arguments");
             return;
         }
         for (var i = 0; i < this.playerCount; i++) {
@@ -140,7 +140,7 @@ function match(roomid, MAXPLAYERS) {
         valid = valid || actionObj.action.toLowerCase() === "duck";
         valid = valid || actionObj.action.toLowerCase() === "hit";
         if (valid) {
-            this.sendToPlayers(actionObj.username, "Match.playerUpdate", {
+            this.sendToPlayersExcept(actionObj.username, "Match.playerUpdate", {
                 username : actionObj.username,
                 action : actionObj.action
             });
@@ -165,7 +165,7 @@ function match(roomid, MAXPLAYERS) {
         //initalize the board
         //Generate start obj with board info and match info
         //Tell players the match has started
-        this.sendToPlayers('Server.startMatch', this.getMatchObj);
+        this.sendToPlayers('Server.startMatch', this.getMatchObj());
     }
 }
 exports.match = match;

@@ -45,11 +45,12 @@ foundGame is a successful response sent to the client that requests a findGame. 
 [
 	{
 		"id" : int,
-		"enemy" : string
+		"enemy" : string,
+		"spawnTime" : float
 	}
 ]
 ```
-boardUpdate is a successful response sent to the client that requests a getBoard. The response object **is an array**.
+boardUpdate is a successful response sent to the client that requests a getBoard. The response object **is an array**. spawnTime is the amount of time to wait to spawn an enemy (Eg: setInteval(spawn, spawnTime)).
 ### Match.playerUpdate S
 #### Response
 ```json
