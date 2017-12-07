@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	var cookie = document.cookie.split("=")[1];
 	/**
 	 * Login button function
 	 */
@@ -20,6 +21,7 @@ $(document).ready(function(){
 				var json = JSON.parse(recieved);
 				if(request.status === 200) { //200 status = success
 					$("#loginmodal").modal("hide");
+					storeCookie(json.cookie);
 					document.getElementById("loginButton").style.display = "none";
 					document.getElementById("logoutButton").style.display = "block";
 					document.getElementById("createButton").style.display = "none";
@@ -32,12 +34,8 @@ $(document).ready(function(){
 					document.getElementById("password_input").value = "";
 				}
 			});
-			request.open("POST", "https://TBD.com/login");
-			request.send(JSON.stringify({ "name": userName, "pass": passWord }));
-			
-
-
-			
+			request.open("POST", "http://dinodash.azurewebsites.net/user/login");
+			request.send(JSON.stringify({ "username": userName, "password": passWord }));		
 		}
 	});
 
@@ -73,36 +71,42 @@ $(document).ready(function(){
 			} else { //Passwords match, continue
 				var user_name = document.getElementById("u_input").value;
 				var password = document.getElementById("p1_input").value;
-				/*
+				
 				var request = new XMLHttpRequest();
-
 				request.addEventListener("load", function () {
 					var recieved = this.responseText;
 					if(request.status == 200) { //Valid registration, continue
 						var json = JSON.parse(recieved);
-						storeLoginCookie(json.cookie);
+						storeCookie(json.cookie);
+						$("#createmodal").modal("hide");
+						document.getElementById("loginButton").style.display = "none";
+						document.getElementById("logoutButton").style.display = "block";
+						document.getElementById("createButton").style.display = "none";
 
 					} else { //Invalid registration, stop
 						window.alert("Failed to create account.");
 						document.getElementById("userName").value = "";
 					}
 				});
-				request.open("POST", "https://TBD.com");
-				request.send(JSON.stringify({	"email": email,
-												"pass": password,
-												"name": fullName,
-												"phone": phoneNumber,
-												"username": userName}));
-				*/							
-				console.log(user_name);
-				console.log(password);
-				$("#createmodal").modal("hide");
-				document.getElementById("loginButton").style.display = "none";
-				document.getElementById("logoutButton").style.display = "block";
-				document.getElementById("createButton").style.display = "none";
+				request.open("POST", "http://dinodash.azurewebsites.net/user/create");
+				request.send(JSON.stringify({"username": user_name, "password": password}));					
+
+				
 
 			
 			}
 		}
 	});
+	function storeCookie(cookie) {
+		if (cookie == 0) {
+			return;
+		}
+		var time = new Date();
+		time.setFullYear(1 + time.getFullYear());  //expires in a year
+		var date = time.toUTCString();
+		var chipsahoy = "cookie=" + cookie +"; expires=" + date + ";path=/";
+		document.cookie = chipsahoy;
+		
+	}
+
 });
