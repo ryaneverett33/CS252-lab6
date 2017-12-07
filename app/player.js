@@ -25,6 +25,17 @@ function Player(floorPosY) {
 	var currTicks = 0;
 	var wasCroutching = false;
 
+	this.getBoundingBox = function() {
+		var bb = {
+			posX: this.posX + 2 * scale,
+			posY: this.posY,
+			width: 12 * scale,
+			height: this.currHeight
+		};
+
+		return bb;
+	}
+
 	this.update = function() {
 		if(onFloor && Input.getInstance().isKeyPressed(38)) {
 			this.velY = -jumpVel;
