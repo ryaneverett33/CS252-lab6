@@ -12,5 +12,11 @@ Signals emitted by the client are denoted with a C. Signals emitted by the serve
 }
 ```
 Describe the match that just started with enough information for clients to start. Players **is an array**.
-### Server.startMatch S
-TBD
+### Server.endMatch S
+#### Response
+```json
+{
+	"winner" : username
+}
+```
+Describes the match that just finished, returns who the winner was.

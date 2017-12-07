@@ -1,6 +1,7 @@
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
+var os = require('os');
 var gameRoot = "\\app\\";
 
 String.prototype.replaceAt=function(index, replacement) {
@@ -47,10 +48,10 @@ exports.staticHandler = function(request, response) {
 		'.pdf': 'application/pdf',
 		'.doc': 'application/msword'
 	  };
-	  var resolvedpath = process.cwd() + gameRoot + pathname;
-
-	  resolvedpath = rightToLeft(resolvedpath);
-
+		var resolvedpath = process.cwd() + gameRoot + pathname;
+		if (os.platform() === "win32") {
+			resolvedpath = rightToLeft(resolvedpath);
+		}
 	  console.log("Resolved path: " + resolvedpath);
 	  
 	  fs.exists(resolvedpath, function(exists) {
