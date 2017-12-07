@@ -76,12 +76,10 @@ function Player(floorPosY) {
 
 		if(!wasCroutching && isCroutching) {
 			spritePosX = 414;
-			console.log("1");
 		}
 
 		if(wasCroutching && !isCroutching) {
 			spritePosX = 76;
-			console.log("2");
 		}
 
 		wasCroutching = isCroutching;
