@@ -8,6 +8,11 @@ function GameManager() {
 	var score = 0;
 	var increaseScoreInterval = 1; //seconds
 	var scoreIntervalRet;
+	var highscore_string = document.getElementById("hs").innerHTML;
+	var highscore = parseInt(/\d+/.exec(highscore_string));
+	parseInt("10") + "<br>";
+	console.log(highscore);
+	var newHS = false;
 
 	Input.getInstance().init(canvasElement);
 
@@ -17,6 +22,12 @@ function GameManager() {
 	function increaseScore() {
 		score++;
 		document.getElementById("score").innerHTML = "Score: " + score;
+		if (score > highscore) {
+			highscore = score;
+			document.getElementById("hs").innerHTML = "Highscore: " + score;
+			newHS = true;
+		}
+
 
 		if(score % 10 == 0 && score < 60) {
 			enemyManager.speed += 2;
@@ -31,6 +42,8 @@ function GameManager() {
 			case "mainMenu":
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
 				document.getElementById("score").style.display = "none";
+				document.getElementById("hs").style.display = "none";
+				document.getElementById("wins").style.display = "none";
 				document.getElementById("mainMenu").style.display = "block";
 
 				break;
@@ -42,6 +55,9 @@ function GameManager() {
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
 				document.getElementById("score").style.display = "block";
 				document.getElementById("score").innerHTML = "Score: 0";
+				document.getElementById("hs").style.display = "block";
+				document.getElementById("wins").style.display = "block";
+
 				document.getElementById("mainMenu").style.display = "none";
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
 				canvasElement.focus();
@@ -50,8 +66,25 @@ function GameManager() {
 			case "singlePlayerDeathMenu":
 				document.getElementById("singlePlayerDeathMenu").style.display = "block";
 				window.clearInterval(scoreIntervalRet);
-
+				if (newHS) {
+					console.log("GAME OVER");
+					//set new highscore in database
+					$(document).ready(function(){
+						var request = new XMLHttpRequest();
+						request.addEventListener("load", function () {
+							var recieved = this.responseText;
+							var json = JSON.parse(recieved);
+							if(request.status === 200) { //200 status = success
+								console.log("Set user endpoint success");
+							} else { //invalid login credentials
+								console.log("Set user endpoint failure");
+							}
+						});
+						request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
+					});
 				break;
+				}
 
 		}
 	}
@@ -59,7 +92,8 @@ function GameManager() {
 	function update() {
 		switch(state) {
 			case "singlePlayer":
-				enemyManager.update(player.posX, player.posY - player.currHeight, player.width, player.currHeight);
+				var playerBB = player.getBoundingBox();
+				enemyManager.update(playerBB.posX, playerBB.posY - playerBB.height, playerBB.width, playerBB.height);
 				player.update();
 
 				break;

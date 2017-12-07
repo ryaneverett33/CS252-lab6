@@ -7,9 +7,10 @@ p:hover {
 	cursor: pointer;
 }
 
-#canvas {
+#canvas, img {
 	margin: auto;
 	display: block;
+	image-rendering: pixelated;
 }
 
 .menu {
@@ -20,8 +21,20 @@ p:hover {
 
 #score {
 	position: absolute;
-	left: 400px;
-	top: 20px;
+	left: 15%;
+	top: 54px;
+}
+
+#wins {
+	position: absolute;
+	left: 15%;
+	top: 29px;
+}
+
+#hs {
+	position: absolute;
+	left: 15%;
+	top: 4px;
 }
 
 .login{
@@ -41,3 +54,5 @@ p:hover {
     top:4px;
     right:4px;
 }
+
+
