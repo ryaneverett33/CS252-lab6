@@ -59,7 +59,7 @@ function GameManager() {
 	function update() {
 		switch(state) {
 			case "singlePlayer":
-				enemyManager.update(player.posX, player.posY - player.currHeight, player.width, player.currHeight);
+				enemyManager.update(player.posX, player.posY - player.currHeight, player.currWidth, player.currHeight);
 				player.update();
 
 				break;
