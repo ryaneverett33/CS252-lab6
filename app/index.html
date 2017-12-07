@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+	<title>Dino Runner</title>
+
+	<link href="style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+<body>
+
+
+	<button type="button" id="loginButton" class="btn btn-outline-dark login"  data-toggle="modal" style="display: block;" data-target="#loginmodal">
+	Login
+	</button>
+
+	<button type="button" id="logoutButton" class="btn btn-outline-dark logout" style="display: none;">
+	Logout
+	</button>
+
+	<button type="button" id="createButton" class="btn btn-outline-dark create"  data-toggle="modal" data-target="#createmodal" style="display: block;">
+	Create Account
+	</button>
+
+	<div class="modal" id="loginmodal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title">Login</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				    <span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+				<div class="modal-body">
+				  <p>
+				    <form>
+				      <div class="form-group">
+				        <label for="exampleInputEmail1">Username</label>
+				        <input type="username" class="form-control" id="username_input" placeholder="Enter username">
+				      </div>
+				      <div class="form-group">
+				        <label for="exampleInputPassword1">Password</label>
+				        <input type="password" class="form-control" id="password_input" placeholder="Password">
+				      </div>
+				    </form>
+				  </p>
+				</div>
+				<div class="modal-footer">
+				  <div class="form-control-feedback invisible" id="loginError" style="color: red"></div>  
+				  <button type="button" id="login" class="btn btn-success" ">Login</button>
+				  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal" id="createmodal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title">Create Account</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				    <span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+				<div class="modal-body">
+				  <p>
+				    <form>
+				      <div class="form-group">
+				        <label for="exampleInputEmail1">Username</label>
+				        <input type="username" class="form-control" id="u_input" placeholder="Enter username">
+				      </div>
+				      <div class="form-group">
+				        <label for="exampleInputPassword1">Password</label>
+				        <input type="password" class="form-control" id="p1_input" placeholder="Password">
+				      </div>
+				      <div class="form-group">
+				        <label for="exampleInputPassword1">Re-enter Password</label>
+				        <input type="password" class="form-control" id="p2_input" placeholder="Password">
+				      </div>
+				    </form>
+				  </p>
+				</div>
+				<div class="modal-footer">
+				  <div class="form-control-feedback invisible" id="CreateError" style="color: red"></div>  
+				  <button type="button" id="create" class="btn btn-success">Create account</button>
+				  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.getElementById("logoutButton").onclick = function() {
+			//TODO: clear cookie
+			document.getElementById("loginButton").style.display = "block";
+			document.getElementById("logoutButton").style.display = "none";
+			document.getElementById("createButton").style.display = "block";
+
+
+		};		
+	</script>
+		
+
+	<script type="text/javascript">
+		function change() 
+			{
+			    var elem = document.getElementById("myButton1");
+			    if (elem.value=="Close Curtain") elem.value = "Open Curtain";
+			    else elem.value = "Close Curtain";
+			}
+	</script>
+
+
+
+
+
+
+
+
+	<div id="container">
+		<canvas
+			id="canvas"
+			width="1024"
+			height="576"
+			oncontextmenu="return false;"
+			tabindex=1>
+		</canvas>
+	</div>
+
+	<div class="menu" id="mainMenu">
+		<p id="singlePlayerButton">Single player</p>
+		<p id="multiPlayerButton">Multiplayer</p>
+		<p>Options</p>
+	</div>
+
+	<div class="menu" id="singlePlayerDeathMenu" style="display: none;">
+		<p id="singlePlayerRestartButton">Restart</p>
+		<p id="mainMenuButton">Main menu</p>
+	</div>
+
+	<div class="menu" id="singlePlayerDeathMenu" style="display: none;">
+		<p id="singlePlayerRestartButton">Restart</p>
+		<p id="mainMenuButton">Main menu</p>
+	</div>
+
+	<p id="score">Score: 0</p>
+
+	<script src="input.js"></script>
+	<script src="enemy.js"></script>
+	<script src="enemyManager.js"></script>
+	<script src="player.js"></script>
+	<script src="gameManager.js"></script>
+	<script src="socket.io/socket.io.js"></script>
+	<script>
+		var canvasElement = document.getElementById("canvas");
+		var canvas = canvasElement.getContext("2d");
+		canvas.imageSmoothingEnabled = false;
+
+		var gameManager = new GameManager();
+		gameManager.setState("mainMenu");
+
+		document.getElementById("singlePlayerButton").onclick = function() {
+			gameManager.setState("singlePlayer");
+		};
+
+		document.getElementById("multiPlayerButton").onclick = function() {
+				//connect to socket on backend
+				var socket = io.connect('http://dinodash.azurewebsites.net');
+				var room;
+				//once socket is connected, find a game (code on server.js)
+				socket.on('connect', function(){
+				    socket.emit('find_game');
+				});
+
+				socket.on('room_id', function(room_id) {
+					room = room_id
+				})
+				socket.on('created_room', function() {
+					//TODO: tell user "waiting for opponent"
+				})
+
+				socket.on('startgame', function() {
+					//TODO: start the game
+				})
+				/*
+				if game is over...
+				room.on('leave', room);
+				*/
+				//TODO: implement sending data to backend
+		};
+
+
+
+		document.getElementById("singlePlayerRestartButton").onclick = function() {
+			gameManager.setState("singlePlayer");
+		};
+
+		document.getElementById("mainMenuButton").onclick = function() {
+			gameManager.setState("mainMenu");
+		};
+
+		gameManager.start();
+	</script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+	<script src="scriptAccounts.js"></script>
+
+</body>
+</html>
