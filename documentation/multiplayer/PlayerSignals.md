@@ -50,3 +50,11 @@ Error: Player.error
 }
 ```
 Contains an error message from a previous request that failed.
+### Player.dead S
+#### Response
+```json
+{
+	"username" : string
+}
+```
+Describes the player that just died and is out of the game.
