@@ -48,7 +48,9 @@ exports.staticHandler = function(request, response) {
 		'.doc': 'application/msword'
 	  };
 	  var resolvedpath = process.cwd() + gameRoot + pathname;
+
 	  resolvedpath = rightToLeft(resolvedpath);
+
 	  console.log("Resolved path: " + resolvedpath);
 	  
 	  fs.exists(resolvedpath, function(exists) {

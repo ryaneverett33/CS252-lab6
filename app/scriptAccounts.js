@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	var cookie = document.cookie.split("=")[1];
 	/**
 	 * Login button function
 	 */
@@ -22,6 +21,7 @@ $(document).ready(function(){
 				if(request.status === 200) { //200 status = success
 					$("#loginmodal").modal("hide");
 					storeCookie(json.cookie);
+					console.log("STORING COOKIE: " + json.cookie);
 					document.getElementById("loginButton").style.display = "none";
 					document.getElementById("logoutButton").style.display = "block";
 					document.getElementById("createButton").style.display = "none";
@@ -37,6 +37,35 @@ $(document).ready(function(){
 			request.open("POST", "http://dinodash.azurewebsites.net/user/login");
 			request.send(JSON.stringify({ "username": userName, "password": passWord }));		
 		}
+	});
+
+	/*
+	Get user stats function
+	*/
+
+	$("#singlePlayerButton").click(function() {
+		//Get highscore and wins
+		console.log("COOKIE IS NOW: " + document.cookie.split("=")[1]);
+		//Check for blank or null
+		var request = new XMLHttpRequest();
+		request.addEventListener("load", function () {
+			var recieved = this.responseText;
+			var json = JSON.parse(recieved);
+			hs = json.highscore;
+			wins = json.wins;
+			if(request.status === 200) { //200 status = success
+				document.getElementById("hs").value = "Highscore = " + hs
+				document.getElementById("wins").value = "Wins = " + wins;
+
+
+			} else { //invalid login credentials
+				document.getElementById("hs").value = "Highscore = N.A.";
+				document.getElementById("wins").value = "Wins = N.A.";
+			}
+		});
+		request.open("POST", "http://dinodash.azurewebsites.net/user/get");
+		request.send(JSON.stringify({ "cookie": document.cookie.split("=")[1] }));		
+		
 	});
 
 
@@ -106,7 +135,6 @@ $(document).ready(function(){
 		var date = time.toUTCString();
 		var chipsahoy = "cookie=" + cookie +"; expires=" + date + ";path=/";
 		document.cookie = chipsahoy;
-		
 	}
 
 });

@@ -10,7 +10,7 @@ function Enemy(floorPosY, canvasWidth, type) { //type: floor, ariel
 	this.width = spriteWidth * scale;
 	this.height = spriteHeight * scale;
 	this.posX = canvasWidth;
-	this.posY = type == "floor" ? floorPosY - this.height : floorPosY - this.height - 60;
+	this.posY = type == "floor" ? floorPosY - this.height : floorPosY - this.height - 70;
 
 	this.getBoundingBox = function() {
 		var bb = {
