@@ -80,8 +80,8 @@ function GameManager() {
 								console.log("Set user endpoint failure");
 							}
 						});
-						request.open("POST", "http://localhost:1337/user/set");//"http://dinodash.azurewebsites.net/user/login");
-						request.send(JSON.stringify({ "column": "highscore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
+						request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
 					});
 				break;
 				}

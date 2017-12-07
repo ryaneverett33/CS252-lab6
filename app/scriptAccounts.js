@@ -34,7 +34,7 @@ $(document).ready(function(){
 					document.getElementById("password_input").value = "";
 				}
 			});
-			request.open("POST", "http://localhost:1337/user/login");//"http://dinodash.azurewebsites.net/user/login");
+			request.open("POST", "http://dinodash.azurewebsites.net/user/login");
 			request.send(JSON.stringify({ "username": userName, "password": passWord }));		
 		}
 	});
@@ -63,7 +63,7 @@ $(document).ready(function(){
 				document.getElementById("wins").value = "Wins = N.A.";
 			}
 		});
-		request.open("POST", "http://localhost:1337/user/get");//"http://dinodash.azurewebsites.net/user/login");
+		request.open("POST", "http://dinodash.azurewebsites.net/user/get");
 		request.send(JSON.stringify({ "cookie": document.cookie.split("=")[1] }));		
 		
 	});
@@ -117,7 +117,7 @@ $(document).ready(function(){
 						document.getElementById("userName").value = "";
 					}
 				});
-				request.open("POST", "http://localhost:1337/user/create");//"http://dinodash.azurewebsites.net/user/create");
+				request.open("POST", "http://dinodash.azurewebsites.net/user/create");
 				request.send(JSON.stringify({"username": user_name, "password": password}));					
 
 				
