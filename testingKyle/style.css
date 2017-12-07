@@ -7,9 +7,10 @@ p:hover {
 	cursor: pointer;
 }
 
-#canvas {
+#canvas, img {
 	margin: auto;
 	display: block;
+	image-rendering: pixelated;
 }
 
 .menu {
