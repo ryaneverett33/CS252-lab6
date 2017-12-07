@@ -3,7 +3,7 @@ function Enemy(floorPosY, canvasWidth, type) { //type: floor, ariel
 	this.width = 50;
 	this.height = 50;
 	this.posX = canvasWidth;
-	this.posY = type == "floor" ? floorPosY - this.height : floorPosY - this.height - 70;
+	this.posY = type == "floor" ? floorPosY - this.height : floorPosY - this.height - 60;
 
 	this.update = function(speed) {
 		this.posX -= speed;
