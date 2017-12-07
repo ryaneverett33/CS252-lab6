@@ -64,7 +64,7 @@ exports.getUser = function (cookie, callback) {
     } else {
         console.log("PRINTING COOKIES");
         for (var c in users) {
-        //for all keys in dictionary
+            //for all keys in dictionary
             console.log(users[c]);
             console.log(c);
         }
@@ -78,7 +78,7 @@ exports.getUser = function (cookie, callback) {
                 callback(-1, -1);
                 return;
             } else {
-                    //
+                //
                 var highscore = obj["HighScore"];
                 var wins = obj["Wins"];
                 console.log("highscore from db", highscore);
@@ -86,20 +86,20 @@ exports.getUser = function (cookie, callback) {
                 callback(highscore, wins);
                 return;
             }
-        });   
+        });
     }
 }
 
 //callback(null|userid)
 exports.setUser = function (column, value, cookie, callback) {
-    if (cookie === null || cookie === 0) {
+    if (cookie === null || cookie == 0 || column === null || value === null) {
         console.log("invalid arguments");
         callback(-1, -1);
         return;
     } else {
         console.log("PRINTING COOKIES");
         for (var c in users) {
-        //for all keys in dictionary
+            //for all keys in dictionary
             console.log(users[c]);
             console.log(c);
         }
@@ -118,7 +118,7 @@ exports.setUser = function (column, value, cookie, callback) {
                 callback(userid);
                 return;
             }
-        });   
+        });
     }
 }
 
@@ -179,11 +179,11 @@ exports.addUser = function (username, password, callback) {
         return;
     }
     //check if user exists in db before adding
-    UserGetter.get(username, function(obj) {
+    UserGetter.get(username, function (obj) {
         if (obj == null || obj === null) {
             //user doesn't exist, can add
             //success is boolean
-            UserAdder.add(username, password, function(success) {
+            UserAdder.add(username, password, function (success) {
                 if (success) {
                     console.log("Successfully added user in db");
                     var cookie = trackUser(username);
@@ -192,7 +192,7 @@ exports.addUser = function (username, password, callback) {
                         handleCallback(callback, 3);
                         return;
                     }
-                    else{
+                    else {
                         handleCallback(callback, cookie);
                     }
                 }
