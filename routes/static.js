@@ -1,6 +1,7 @@
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
+var os = require('os');
 var gameRoot = "\\testingKyle\\";
 
 String.prototype.replaceAt=function(index, replacement) {
