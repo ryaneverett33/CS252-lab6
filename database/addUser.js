@@ -7,6 +7,7 @@ function add(name, password, callback) {
   pool.get(function (err, connection) {
     if (err) {
       console.error(err);
+      pool.release(connection);
       return;
     }
     // If no error, then good to proceed.  

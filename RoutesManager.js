@@ -11,6 +11,9 @@ var login = require('./routes/login.js');
 var create = require('./routes/create.js');
 var example = require('./routes/example.js');
 var static = require('./routes/static.js');
+var get = require('./routes/get.js');
+var set = require('./routes/set.js');
+
 
 exports.login = function (req, res, nex) {
     console.log("called login");
@@ -42,3 +45,29 @@ exports.create = function (req, res, nex) {
         create.createHandler(req, res, body);
     });
 }
+
+exports.get = function (req, res, nex) {
+    console.log("called get");
+    let body = [];
+    req.on('data', (chunk) => {
+        body.push(chunk);
+    }).on('end', () => {
+        body = Buffer.concat(body).toString();
+        // at this point, `body` has the entire request body stored in it as a string
+        get.getHandler(req, res, body);
+    });
+}
+
+exports.set = function (req, res, nex) {
+    console.log("called set");
+    let body = [];
+    req.on('data', (chunk) => {
+        body.push(chunk);
+    }).on('end', () => {
+        body = Buffer.concat(body).toString();
+        // at this point, `body` has the entire request body stored in it as a string
+        set.setHandler(req, res, body);
+    });
+}
+
+
