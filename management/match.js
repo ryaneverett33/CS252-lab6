@@ -120,7 +120,7 @@ function match(roomid, MAXPLAYERS) {
         }
         for (var i = 0; i < this.playerCount; i++) {
             var playersocket = this.players[i].socket;
-            playersocket.emit(type, obj);
+            this.safeEmit(playersocket, type, obj);
         }
     }
     //Sends signal of type type to all players except for player
@@ -136,18 +136,18 @@ function match(roomid, MAXPLAYERS) {
                 continue;
             }
             var playersocket = player.socket;
-            playersocket.emit(type, obj);
+            this.safeEmit(playersocket, type, obj);
         }
     }
     //actionObj { "roomid" : int, "username" : string, "action" : "jump|duck|hit"}
     //Socket is the socket of the sender
     this.handlePlayerAction = function (socket, actionObj) {
         if (actionObj.username == null) {
-            socket.emit("Player.error", { error: "Invalid username" });
+            this.safeEmit(socket, "Player.error", { error: "Invalid username" });
             return;
         }
         if (actionObj.action == null) {
-            socket.emit("Player.error", { error: "Invalid Player Action" });
+            this.safeEmit(socket, "Player.error", { error: "Invalid Player Action" });
             return;
         }
         var valid = actionObj.action.toLowerCase() === "jump";
@@ -160,7 +160,7 @@ function match(roomid, MAXPLAYERS) {
             });
         }
         else {
-            socket.emit("Player.error", { error: "Invalid Player Action" });
+            this.safeEmit(socket, "Player.error", { error: "Invalid Player Action" });
             return;
         }
         if (actionObj.action.toLowerCase() === "hit") {
@@ -174,10 +174,10 @@ function match(roomid, MAXPLAYERS) {
     //boardObj { "roomid" : int, "distance" : int}
     this.getBoard = function(socket, boardObj) {
         if (boardObj.distance == null || boardObj.distance < 0) {
-            socket.emit('Match.error', { error : "Invalid board distance" })
+            this.safeEmit(socket, 'Match.error', { error : "Invalid board distance" })
         }
         else {
-            socket.emit('Match.boardUpdate', board.getSegment(boardObj.distance));
+            this.safeEmit(socket, 'Match.boardUpdate', board.getSegment(boardObj.distance));
         }
     }
     //returns true/false
@@ -199,7 +199,7 @@ function match(roomid, MAXPLAYERS) {
         for (var player in this.players) {
             if (player.username === username) {
                 player.alive = false;
-                player.socket.emit("Player.dead");
+                this.safeEmit(player.socket, "Player.dead");
                 return;
             }
         }
