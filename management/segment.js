@@ -4,6 +4,8 @@ function segment(id, size) {
     this.size = size;
     this.chunks = new Array(size);
     this.hasGenerated = false;
+    this.minTime = 1000;
+    this.randInterval = 1000;
 
     //Handles the actual enemy generation
     //A simple modification of Kyle's enemyManger.spawnEnemy()
@@ -23,6 +25,10 @@ function segment(id, size) {
         }
         this.hasGenerated = true;
     }
+    //Based off of enemyManager.spawnEnemy()
+    this.randomTime = function() {
+        return (this.minTime + Math.random() * this.randInterval);
+    }
     //Returns [ {"id" : int, "enemy" : string}]
     //segmentPosition is where the segment is in relation to the board
     // Ex: seg: 0, ids start at 0, seg: 1, ids start at 100
@@ -32,7 +38,8 @@ function segment(id, size) {
         for (var i = 0; i < this.size; i++) {
             var obj = {
                 id : (start + i),
-                enemy : this.chunks[i]
+                enemy : this.chunks[i],
+                spawnTime : this.randomTime()
             };
             arr[i] = obj;
         }
