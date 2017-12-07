@@ -55,7 +55,7 @@ exports.staticHandler = function(request, response) {
 		 if (!exists) {
 			 console.log("File does not exist");
 			 response.statusCode = 404;
-			 response.setHeader('Content-type', 'text/plain' );
+			 response.setHeader('Content-type', 'text/html' );
 			 response.end("File doesn't exist!");
 			 return;
 		 } 
