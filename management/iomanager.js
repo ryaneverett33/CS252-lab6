@@ -16,7 +16,7 @@ var currentGameCount = 0;
 var MAXPLAYERS = 2;
 
 //Safely emits a message over a socket, no err today bois
-this.safeEmit = function(socket, type, message) {
+function safeEmit(socket, type, message) {
     if (socket.connected) {
         socket.emit(type, message);
     }
