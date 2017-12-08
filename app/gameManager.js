@@ -29,6 +29,7 @@ function GameManager() {
         		break;
         	case "hit":
         		that.setState("MultiplayerDeathMenu");
+        		document.getElementById('notfication').style.display = 'none';
         }
     });
 

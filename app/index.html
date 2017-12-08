@@ -27,21 +27,21 @@
 				<div class="modal-header">
 				  <h5 class="modal-title">Login</h5>
 				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				    <span aria-hidden="true">&times;</span>
+					<span aria-hidden="true">&times;</span>
 				  </button>
 				</div>
 				<div class="modal-body">
 				  <p>
-				    <form>
-				      <div class="form-group">
-				        <label for="exampleInputEmail1">Username</label>
-				        <input type="username" class="form-control" id="username_input" placeholder="Enter username">
-				      </div>
-				      <div class="form-group">
-				        <label for="exampleInputPassword1">Password</label>
-				        <input type="password" class="form-control" id="password_input" placeholder="Password">
-				      </div>
-				    </form>
+					<form>
+					  <div class="form-group">
+						<label for="exampleInputEmail1">Username</label>
+						<input type="username" class="form-control" id="username_input" placeholder="Enter username">
+					  </div>
+					  <div class="form-group">
+						<label for="exampleInputPassword1">Password</label>
+						<input type="password" class="form-control" id="password_input" placeholder="Password">
+					  </div>
+					</form>
 				  </p>
 				</div>
 				<div class="modal-footer">
@@ -60,25 +60,25 @@
 				<div class="modal-header">
 				  <h5 class="modal-title">Create Account</h5>
 				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				    <span aria-hidden="true">&times;</span>
+					<span aria-hidden="true">&times;</span>
 				  </button>
 				</div>
 				<div class="modal-body">
 				  <p>
-				    <form>
-				      <div class="form-group">
-				        <label for="exampleInputEmail1">Username</label>
-				        <input type="username" class="form-control" id="u_input" placeholder="Enter username">
-				      </div>
-				      <div class="form-group">
-				        <label for="exampleInputPassword1">Password</label>
-				        <input type="password" class="form-control" id="p1_input" placeholder="Password">
-				      </div>
-				      <div class="form-group">
-				        <label for="exampleInputPassword1">Re-enter Password</label>
-				        <input type="password" class="form-control" id="p2_input" placeholder="Password">
-				      </div>
-				    </form>
+					<form>
+					  <div class="form-group">
+						<label for="exampleInputEmail1">Username</label>
+						<input type="username" class="form-control" id="u_input" placeholder="Enter username">
+					  </div>
+					  <div class="form-group">
+						<label for="exampleInputPassword1">Password</label>
+						<input type="password" class="form-control" id="p1_input" placeholder="Password">
+					  </div>
+					  <div class="form-group">
+						<label for="exampleInputPassword1">Re-enter Password</label>
+						<input type="password" class="form-control" id="p2_input" placeholder="Password">
+					  </div>
+					</form>
 				  </p>
 				</div>
 				<div class="modal-footer">
@@ -106,9 +106,9 @@
 	<script type="text/javascript">
 		function change() 
 			{
-			    var elem = document.getElementById("myButton1");
-			    if (elem.value=="Close Curtain") elem.value = "Open Curtain";
-			    else elem.value = "Close Curtain";
+				var elem = document.getElementById("myButton1");
+				if (elem.value=="Close Curtain") elem.value = "Open Curtain";
+				else elem.value = "Close Curtain";
 			}
 	</script>
 
@@ -152,7 +152,7 @@
 	<p id="wins">Wins: 0</p>
 	<p id="username"></p>
 	<p id="roomid"></p>
-	<p id="findinggame">Looking for opponent...</p>
+	<p id="notfication">Looking for opponent...</p>
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
@@ -177,23 +177,27 @@
 			//connect to socket on backend
 			//var socket = io.connect('http://dinodash.azurewebsites.net');
 			
-	        socket.on('Match.foundGame', function(roominfo) {
-	            console.log('foundGame', roominfo);
-	            document.getElementById('roomid').innerHTML = roominfo.roomid;
+			socket.on('Match.foundGame', function(roominfo) {
+				console.log('foundGame', roominfo);
+				document.getElementById('roomid').innerHTML = roominfo.roomid;
 
-	        });
-	        socket.on('Server.startMatch', function(matchInfo) {
-                console.log('startMatch', matchInfo);
-                //start game
-                document.getElementById('findinggame').style.display = 'none';
+			});
+			socket.on('Server.startMatch', function(matchInfo) {
+				console.log('startMatch', matchInfo);
+				//start game
+				document.getElementById('notfication').style.display = 'none';
+				document.getElementById('notfication').innerHTML = 'Finding an opponent...';
+
 				gameManager.setState("Multiplayer");
 
-            });
+			});
 
-            socket.on('Server.endMatch', function(summary) {
-            	//add win if winner
-            	if (summary.winner == document.cookie.split("=")[1])
+			socket.on('Server.endMatch', function(summary) {
+				//add win if winner
+				if (summary.winner == document.cookie.split("=")[1])
 					console.log("ADDING WIN");
+					document.getElementById('notfication').innerHTML = 'You won!';
+
 					$(document).ready(function(){
 						var wins = parseInt(/\d+/.exec(document.getElementById("wins").innerHTML));
 						console.log("CURRENT WINS: " + wins);
@@ -211,49 +215,49 @@
 						//request.open("POST", "http://localhost:1337/user/set");
 						request.send(JSON.stringify({ "column": "Wins", "value": wins, "cookie": document.cookie.split("=")[1] }));		
 					});
-            	//leave
-            	console.log("ENDMATCH SOCKET SHIT");
-            	document.getElementById('roomid').innerHTML = '';
-            });
+				//leave
+				console.log("ENDMATCH SOCKET SHIT");
+				document.getElementById('roomid').innerHTML = '';
+			});
 
-            socket.on('Match.boardUpdate', function(boardObj) {
-                console.log('boardUpdate', boardObj);
-            });
-            /*socket.on('Match.playerUpdate', function(playerObj) {
-                console.log('playerUpdate', playerObj);
+			socket.on('Match.boardUpdate', function(boardObj) {
+				console.log('boardUpdate', boardObj);
+			});
+			/*socket.on('Match.playerUpdate', function(playerObj) {
+				console.log('playerUpdate', playerObj);
 
-                switch(playerObj.action) {
-                	case "jump":
+				switch(playerObj.action) {
+					case "jump":
 
-                		break;
-                }
-            });*/
-            socket.on('Match.error', function(errorObj) {
-                console.log('Matcherror', errorObj);
-            });
-            socket.on('Player.error', function(errorObj) {
-                console.log('Player error', errorObj);
-            });
-            socket.on('Player.dead', function(deadObj) {
-                console.log('Playerdead', deadObj);
-            });
-	        
-	        var username = document.cookie.split("=")[1];
-	        var roomid = document.getElementById('roomid').innerHTML;
-	        var gameObj;
-	        if (roomid == null || roomid === '') {
-	            gameObj = {
-	                username : username
-	            };
-	        }
-	        else {
-	            gameObj = {
-	                username : username,
-	                roomid : roomid
-	            };
-	        }
-	        socket.emit('Match.findGame', gameObj);
-	        document.getElementById('findinggame').style.display = 'block';
+						break;
+				}
+			});*/
+			socket.on('Match.error', function(errorObj) {
+				console.log('Matcherror', errorObj);
+			});
+			socket.on('Player.error', function(errorObj) {
+				console.log('Player error', errorObj);
+			});
+			socket.on('Player.dead', function(deadObj) {
+				console.log('Playerdead', deadObj);
+			});
+			
+			var username = document.cookie.split("=")[1];
+			var roomid = document.getElementById('roomid').innerHTML;
+			var gameObj;
+			if (roomid == null || roomid === '') {
+				gameObj = {
+					username : username
+				};
+			}
+			else {
+				gameObj = {
+					username : username,
+					roomid : roomid
+				};
+			}
+			socket.emit('Match.findGame', gameObj);
+			document.getElementById('findinggame').style.display = 'block';
 
 		}
 
