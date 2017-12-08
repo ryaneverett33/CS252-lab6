@@ -93,6 +93,7 @@
 	<script>
 		document.getElementById("logoutButton").onclick = function() {
 			//TODO: clear cookie
+			document.cookie = "";
 			document.getElementById("loginButton").style.display = "block";
 			document.getElementById("logoutButton").style.display = "none";
 			document.getElementById("createButton").style.display = "block";
@@ -201,6 +202,13 @@
 		document.getElementById("mainMenuButton").onclick = function() {
 			gameManager.setState("mainMenu");
 		};
+
+		//if there's a cookie
+		if(document.cookie.split("=")[1] != undefined) {
+			document.getElementById("loginButton").style.display = "none";
+			document.getElementById("createButton").style.display = "none";
+			document.getElementById("logoutButton").style.display = "block";
+		}
 
 		gameManager.start();
 	</script>
