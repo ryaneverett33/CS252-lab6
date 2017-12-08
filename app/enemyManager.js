@@ -42,8 +42,8 @@ function EnemyManager(floorPosY, canvasWidth) {
 			enemies.push(e);
 		}
 
-		clearInterval(ret);
-		ret = setInterval(that.spawnEnemy, that.minTime + Math.random() * that.randInterval);
+		//clearInterval(ret);
+		//ret = setInterval(that.spawnEnemy, that.minTime + Math.random() * that.randInterval);
 		//ret = setInterval(that.spawnEnemy, that.minTime + random() * that.randInterval);
 		//console.log()
 		//console.log(random());
