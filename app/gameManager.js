@@ -30,6 +30,14 @@ function GameManager() {
         	case "hit":
         		that.setState("MultiplayerDeathMenu");
         		document.getElementById('notfication').style.display = 'none';
+        		break;
+        	case "duck":
+        		rivalPlayer.duck();
+        		break;
+        	case "ducked":
+        		rivalPlayer.doneDuck();
+        		break;
+
         }
     });
 
@@ -104,12 +112,15 @@ function GameManager() {
 				document.getElementById("score").style.display = "none";
 				document.getElementById("hs").style.display = "none";
 				document.getElementById("wins").style.display = "none";
+				document.getElementById("opWins").style.display = "none";
+
 				document.getElementById("mainMenu").style.display = "block";
 				document.getElementById("MultiplayerDeathMenu").style.display = "none";
 				canvas.clearRect(0, 0, width, height);
 
 				break;
 			case "singlePlayer":
+				updateStats();
 				player.posY = floorPosY;
 				player.velY = 0;
 				enemyManager.init(state, seed);
@@ -118,7 +129,7 @@ function GameManager() {
 				document.getElementById("score").style.display = "block";
 				document.getElementById("score").innerHTML = "Score: 0";
 				document.getElementById("hs").style.display = "block";
-				document.getElementById("wins").style.display = "block";
+				//document.getElementById("wins").style.display = "block";
 
 				document.getElementById("mainMenu").style.display = "none";
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
@@ -126,6 +137,7 @@ function GameManager() {
 
 				break;
 			case "Multiplayer":
+				updateStats();
 				player.posY = floorPosY;
 				player.velY = 0;
 				enemyManager.init(state, seed);
@@ -135,6 +147,8 @@ function GameManager() {
 				document.getElementById("score").innerHTML = "Score: 0";
 				document.getElementById("hs").style.display = "block";
 				document.getElementById("wins").style.display = "block";
+				document.getElementById("opWins").style.display = "block";
+
 
 				document.getElementById("mainMenu").style.display = "none";
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
@@ -210,6 +224,46 @@ function GameManager() {
 				}*/
 
 		}
+	}
+	function updateStats() {
+		var request = new XMLHttpRequest();
+		request.addEventListener("load", function () {
+			var recieved = this.responseText;
+			var json = JSON.parse(recieved);
+			hs = json.highscore;
+			wins = json.wins;
+			if(request.status === 200) { //200 status = success
+				document.getElementById("hs").innerHTML = "Highscore = " + hs
+				document.getElementById("wins").innerHTML = "Wins = " + wins;
+
+
+			} else { //invalid login credentials
+				document.getElementById("hs").innerHTML = "Highscore = N.A.";
+				document.getElementById("wins").innerHTML = "Wins = N.A.";
+			}
+		});
+		request.open("POST", "http://dinodash.azurewebsites.net/user/get");
+		//request.open("POST", "http://localhost:1337/user/get");
+		request.send(JSON.stringify({ "cookie": document.cookie.split("=")[1] }));
+
+
+		var request2 = new XMLHttpRequest();
+		var opponent_cookie = document.getElementById("opp_cookie").innerHTML;
+
+		request2.addEventListener("load", function () {
+			var recieved = this.responseText;
+			var json = JSON.parse(recieved);
+			hs = json.highscore;
+			wins = json.wins;
+			if(request2.status === 200) { //200 status = success
+				document.getElementById("opp_cookie").innerHTML = "Opponent Wins = " + wins;
+			} else { //invalid login credentials
+				document.getElementById("opp_cookie").innerHTML = "Opponent Wins = N.A.";
+			}
+		});
+		request2.open("POST", "http://dinodash.azurewebsites.net/user/get");
+		//request.open("POST", "http://localhost:1337/user/get");
+		request2.send(JSON.stringify({ "cookie": opponent_cookie }));
 	}
 
 	function update() {

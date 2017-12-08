@@ -28,18 +28,18 @@ p:hover {
 #wins {
 	position: absolute;
 	left: 15%;
-	top: 29px;
+	top: 4px;
 }
 
 #hs {
 	position: absolute;
 	left: 15%;
-	top: 4px;
+	top: 29px;
 }
 
 #username {
 	position: absolute;
-	left: 50%;
+	left: 41%;
 	top: 4px;
 }
 
@@ -48,6 +48,12 @@ p:hover {
 	left: 41%;
 	top: 29px;
 	display: none;
+}
+
+#opWins {
+	position: absolute;
+	left: 60%;
+	top: 4px;
 }
 
 .login{

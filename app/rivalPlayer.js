@@ -23,6 +23,12 @@ function RivalPlayer(floorPosY) {
 	this.jump = function() {
 		this.velY = -jumpVel;
 	}
+	this.duck = function() {
+		spritePosX = 414;
+	}
+	this.doneDuck = function() {
+		spritePosX = 76;
+	}
 
 	this.update = function() {
 		this.velY += gravity;
