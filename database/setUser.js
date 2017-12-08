@@ -35,6 +35,15 @@ function set(column, newvalue, name, callback) {
             return;
           }
         }
+        else {
+          console.log("Set succeeded");
+          //user["name"] = name;
+          if (callback != null) {
+            pool.release(connection);
+            callback(1);
+            return;
+          }
+        }
       });
       request.addParameter('Value', TYPES.NVarChar, newvalue);
       request.addParameter('Name', TYPES.NVarChar, name);
@@ -53,6 +62,15 @@ function set(column, newvalue, name, callback) {
           if (callback != null) {
             pool.release(connection);
             callback(null);
+            return;
+          }
+        }
+        else {
+          console.log("Set succeeded");
+          //user["name"] = name;
+          if (callback != null) {
+            pool.release(connection);
+            callback(1);
             return;
           }
         }
