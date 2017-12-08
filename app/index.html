@@ -155,7 +155,6 @@
 	<p id="roomid"></p>
 	<p id="notfication">Looking for opponent...</p>
 	<p id="opp_cookie"></p>
-
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
@@ -170,7 +169,7 @@
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
-		var socket = io.connect('http://dinodash.azurewebsites.net/');
+		var socket = io.connect('http://dinodash.azurewebsites.net/', {transports: ['websocket']});
 		var gameManager = new GameManager();
 		gameManager.setState("mainMenu");
 
@@ -202,6 +201,7 @@
 				document.getElementById('notfication').style.display = 'none';
 				document.getElementById('notfication').innerHTML = 'Finding an opponent...';
 
+
 				var roomid = parseInt(/\d+/.exec(document.getElementById("roomid").innerHTML));
 				gameManager.setState("Multiplayer", roomid);
 			});
@@ -214,7 +214,6 @@
 				if (summary.winner == document.cookie.split("=")[1]) {
 					console.log("ADDING WIN");
 					document.getElementById('notfication').style.display = 'block';
-
 					document.getElementById('notfication').innerHTML = 'You won!';
 
 					$(document).ready(function(){
@@ -238,7 +237,6 @@
 					document.getElementById('notfication').style.display = 'block';
 					document.getElementById('notfication').innerHTML = 'You lost!';
 				}
-
 				//leave
 				console.log("ENDMATCH SOCKET SHIT");
 				document.getElementById('roomid').innerHTML = '';
