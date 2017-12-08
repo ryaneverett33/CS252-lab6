@@ -23,15 +23,18 @@ exports.login = function (req, res, nex) {
     }).on('end', () => {
         body = Buffer.concat(body).toString();
         // at this point, `body` has the entire request body stored in it as a string
+        res.setHeader("Access-Control-Allow-Origin", "*");
         login.loginHandler(req, res, body);
     });
 }
 exports.static = function (req, res, nex) {
     console.log("called static");
+    res.setHeader("Access-Control-Allow-Origin", "*");
     static.staticHandler(req, res);
 }
 exports.example = function (req, res, nex) {
     console.log("called example");
+    res.setHeader("Access-Control-Allow-Origin", "*");
     example.exampleHandler(req, res);
 }
 exports.create = function (req, res, nex) {
@@ -42,6 +45,7 @@ exports.create = function (req, res, nex) {
     }).on('end', () => {
         body = Buffer.concat(body).toString();
         // at this point, `body` has the entire request body stored in it as a string
+        res.setHeader("Access-Control-Allow-Origin", "*");
         create.createHandler(req, res, body);
     });
 }
