@@ -167,7 +167,7 @@ function match(roomid, MAXPLAYERS) {
             //handle the hit
             this.killPlayer(actionObj.username);
             if (this.isGameOver()) {
-                this.sendGameOver(getWinner());
+                this.sendGameOver(this.getWinner());
             }
         }
     }
@@ -183,29 +183,34 @@ function match(roomid, MAXPLAYERS) {
     //returns true/false
     this.isGameOver = function() {
         var alivePlayers = 0;
-        for (var player in this.players) {
-            if (!player.alive) {
+        for (var i = 0; i < this.playerCount; i++) {
+            var player = this.players[i];
+            if (player.alive) {
                 alivePlayers++;
             }
         }
         if (alivePlayers > 1) {
-            return true;
+            return false;
         }
         else {
-            return false;
+            return true;
         }
     }
     this.killPlayer = function(username) {
-        for (var player in this.players) {
+        for (var i = 0; i < this.playerCount; i++) {
+            var player = this.players[i];
             if (player.username === username) {
                 player.alive = false;
-                this.safeEmit(player.socket, "Player.dead");
+                this.safeEmit(player.socket, "Player.dead", {
+                    username : username
+                });
                 return;
             }
         }
     }
     this.getWinner = function() {
-        for (var player in this.players) {
+        for (var i = 0; i < this.playerCount; i++) {
+            var player = this.players[i];
             if (player.alive) {
                 return player.username;
             }
@@ -219,7 +224,8 @@ function match(roomid, MAXPLAYERS) {
         this.sendToPlayers("Server.endMatch", matchOverObj);
     }
     this.containsSocket = function(socket) {
-        for (var player in this.players) {
+        for (var i = 0; i < this.playerCount; i++) {
+            var player = this.players[i];
             if (player.socket === socket) {
                 return true;
             }

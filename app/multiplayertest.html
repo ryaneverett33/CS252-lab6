@@ -3,8 +3,12 @@
         <script src="/socket/socket.io.js"></script>
         <script type="text/javascript" >
             var socket = io();
+            var usernameOne;
+            var usernameTwo;
+            var matchid;
             socket.on('Match.foundGame', function(roominfo) {
                 console.log('foundGame', roominfo);
+                matchid = roominfo.roomid;
             });
             socket.on('Server.startMatch', function(matchInfo) {
                 console.log('startMatch', matchInfo)
@@ -31,6 +35,12 @@
                 var username = document.getElementById('username').value;
                 var roomid = document.getElementById('roomid').value;
                 var gameObj;
+                if (usernameOne == null) {
+                    usernameOne = username; 
+                }
+                else if (usernameTwo == null) {
+                    usernameTwo = username;
+                }
                 if (roomid == null || roomid === '') {
                     gameObj = {
                         username : username
@@ -44,11 +54,42 @@
                 }
                 socket.emit('Match.findGame', gameObj);
             }
+            function playerOneAction(action) {
+                if (action === "jump") {
+                    socket.emit("Player.jump", {
+                        roomid : matchid,
+                        username : usernameOne,
+                        action : "jump"
+                    });
+                }
+                else if (action === "duck") {
+                    console.log({
+                        roomid : matchid,
+                        username : usernameOne,
+                        action : "duck"
+                    });
+                    socket.emit("Player.duck", {
+                        roomid : matchid,
+                        username : usernameOne,
+                        action : "duck"
+                    });
+                }
+                else if (action === "hit") {
+                    socket.emit("Player.hit", {
+                        roomid : matchid,
+                        username : usernameOne,
+                        action : "hit"
+                    });
+                }
+            }
         </script>
     </head>
     <body>
         <input type="text" id="username" text="username" />
         <input type="number" id="roomid" text="roomid" /> 
         <button onclick="joinGame()">Join Game</button>
+        <button onclick="playerOneAction('jump')">Player One Jump</button>
+        <button onclick="playerOneAction('duck')">Player One Duck</button>
+        <button onclick="playerOneAction('hit')">Player One hit</button>
     </body>
 </html>
