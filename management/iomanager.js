@@ -138,7 +138,7 @@ function getRoom(roomid) {
 //actionObj { "roomid" : int, "username" : string, "action" : "jump|duck|hit"}
 function handlePlayerAction(socket, actionObj) {
     //get match 
-    console.log("Recieved: " + actionObj);
+    console.log(actionObj);
     if (actionObj.roomid == null) {
         socket.emit("Player.error", { error : "Roomid is invalid"});
         return;
