@@ -7,13 +7,13 @@ function fillObject(columns) {
   for (var i = 0; i < columns.length; i++) {
     var column = columns[i];
     //console.log("name, value", column.metadata.colName, column.value);
-      obj[column.metadata.colName] = column.value;
+    obj[column.metadata.colName] = column.value;
   }
   return obj;
 }
 
 //calls callback(user object)
-function get(name, callback) { 
+function get(name, callback) {
   pool.get(function (err, connection) {
     if (err) {
       console.log(err);
@@ -24,15 +24,15 @@ function get(name, callback) {
       }
     }
     // If no error, then good to proceed.  
-    console.log("Connected!");  
-    request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function(err, rowcount) {  
-      if (err) {  
-          console.log('err', err);
-          if (callback != null) {
-            pool.release(connection);
-            callback(null);
-            return;
-          }
+    console.log("Connected!");
+    request = new Request("SELECT Password, Wins, HighScore FROM users WHERE Name=@Name;", function (err, rowcount) {
+      if (err) {
+        console.log('err', err);
+        if (callback != null) {
+          pool.release(connection);
+          callback(null);
+          return;
+        }
       }
       if (rowcount == 0) {
         console.log("AFFECTED 0 rows");
@@ -45,10 +45,10 @@ function get(name, callback) {
       else {
         pool.release(connection);
       }
-    });  
-    request.addParameter('Name', TYPES.NVarChar, name);  
+    });
+    request.addParameter('Name', TYPES.NVarChar, name);
     var obj = {};
-    request.on('row', function(columns) {  
+    request.on('row', function (columns) {
       /*columns.forEach(function(column) {  
         /*if (column.value === null) {  
           console.log('NULL');  
@@ -71,8 +71,8 @@ function get(name, callback) {
       }
     });
     connection.execSql(request);
-  });  
+  });
 }
- 
+
 
 exports.get = get;

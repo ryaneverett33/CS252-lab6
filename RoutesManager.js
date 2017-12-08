@@ -13,7 +13,7 @@ var example = require('./routes/example.js');
 var static = require('./routes/static.js');
 var get = require('./routes/get.js');
 var set = require('./routes/set.js');
-
+var leaderboards = require('./routes/leaderboards.js');
 
 exports.login = function (req, res, nex) {
     console.log("called login");
@@ -69,5 +69,14 @@ exports.set = function (req, res, nex) {
         set.setHandler(req, res, body);
     });
 }
-
-
+exports.leaderboards = function (req, res, nex) {
+    console.log("called set");
+    let body = [];
+    req.on('data', (chunk) => {
+        body.push(chunk);
+    }).on('end', () => {
+        body = Buffer.concat(body).toString();
+        // at this point, `body` has the entire request body stored in it as a string
+        leaderboards.leaderboardHandler(req, res, body);
+    });
+}
