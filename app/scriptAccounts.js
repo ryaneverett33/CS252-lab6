@@ -56,13 +56,13 @@ $(document).ready(function(){
 			hs = json.highscore;
 			wins = json.wins;
 			if(request.status === 200) { //200 status = success
-				document.getElementById("hs").value = "Highscore = " + hs
-				document.getElementById("wins").value = "Wins = " + wins;
+				document.getElementById("hs").innerHTML = "Highscore = " + hs
+				document.getElementById("wins").innerHTML = "Wins = " + wins;
 
 
 			} else { //invalid login credentials
-				document.getElementById("hs").value = "Highscore = N.A.";
-				document.getElementById("wins").value = "Wins = N.A.";
+				document.getElementById("hs").innerHTML = "Highscore = N.A.";
+				document.getElementById("wins").innerHTML = "Wins = N.A.";
 			}
 		});
 		//request.open("POST", "http://dinodash.azurewebsites.net/user/get");

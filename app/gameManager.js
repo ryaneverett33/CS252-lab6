@@ -8,10 +8,9 @@ function GameManager() {
 	var score = 0;
 	var increaseScoreInterval = 1; //seconds
 	var scoreIntervalRet;
-	var highscore_string = document.getElementById("hs").innerHTML;
-	var highscore = parseInt(/\d+/.exec(highscore_string));
-	parseInt("10") + "<br>";
-	console.log(highscore);
+	//var highscore_string = document.getElementById("hs").innerHTML;
+	//parseInt("10") + "<br>";
+	//console.log(highscore);
 	var newHS = false;
 
 	Input.getInstance().init(canvasElement);
@@ -21,6 +20,7 @@ function GameManager() {
 
 	function increaseScore() {
 		score++;
+		var highscore = parseInt(/\d+/.exec(document.getElementById("hs").innerHTML));
 		document.getElementById("score").innerHTML = "Score: " + score;
 		if (score > highscore) {
 			highscore = score;
