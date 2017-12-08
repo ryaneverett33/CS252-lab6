@@ -22,6 +22,7 @@ $(document).ready(function(){
 					$("#loginmodal").modal("hide");
 					storeCookie(json.cookie);
 					console.log("STORING COOKIE: " + json.cookie);
+					document.getElementById('username').innerHTML = userName;
 					document.getElementById("loginButton").style.display = "none";
 					document.getElementById("logoutButton").style.display = "block";
 					document.getElementById("createButton").style.display = "none";
@@ -34,7 +35,8 @@ $(document).ready(function(){
 					document.getElementById("password_input").value = "";
 				}
 			});
-			request.open("POST", "http://dinodash.azurewebsites.net/user/login");
+			//request.open("POST", "http://dinodash.azurewebsites.net/user/login");
+			request.open("POST", "http://localhost:1337/user/login");
 			request.send(JSON.stringify({ "username": userName, "password": passWord }));		
 		}
 	});
@@ -63,7 +65,8 @@ $(document).ready(function(){
 				document.getElementById("wins").value = "Wins = N.A.";
 			}
 		});
-		request.open("POST", "http://dinodash.azurewebsites.net/user/get");
+		//request.open("POST", "http://dinodash.azurewebsites.net/user/get");
+		request.open("POST", "http://localhost:1337/user/get");
 		request.send(JSON.stringify({ "cookie": document.cookie.split("=")[1] }));		
 		
 	});
@@ -108,6 +111,7 @@ $(document).ready(function(){
 						var json = JSON.parse(recieved);
 						storeCookie(json.cookie);
 						$("#createmodal").modal("hide");
+						document.getElementById('username').innerHTML = user_name;
 						document.getElementById("loginButton").style.display = "none";
 						document.getElementById("logoutButton").style.display = "block";
 						document.getElementById("createButton").style.display = "none";
@@ -117,7 +121,8 @@ $(document).ready(function(){
 						document.getElementById("userName").value = "";
 					}
 				});
-				request.open("POST", "http://dinodash.azurewebsites.net/user/create");
+				//request.open("POST", "http://dinodash.azurewebsites.net/user/create");
+				request.open("POST", "http://localhost:1337/user/create");
 				request.send(JSON.stringify({"username": user_name, "password": password}));					
 
 				

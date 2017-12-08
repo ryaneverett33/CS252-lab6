@@ -37,6 +37,12 @@ p:hover {
 	top: 4px;
 }
 
+#username {
+	position: absolute;
+	left: 50%;
+	top: 4px;
+}
+
 .login{
    position:absolute;
    top:4px;

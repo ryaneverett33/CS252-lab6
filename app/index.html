@@ -147,6 +147,8 @@
 	<p id="hs">Highscore: 0</p>
 	<p id="score">Score: 0</p>
 	<p id="wins">Wins: 0</p>
+	<p id="username"></p>
+	<p id="roomid"></p>
 
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
@@ -167,30 +169,41 @@
 		};
 
 		document.getElementById("multiPlayerButton").onclick = function() {
-				//connect to socket on backend
-				var socket = io.connect('http://dinodash.azurewebsites.net');
-				var room;
-				//once socket is connected, find a game (code on server.js)
-				socket.on('connect', function(){
-				    socket.emit('find_game');
-				});
+			//connect to socket on backend
+			//var socket = io.connect('http://dinodash.azurewebsites.net');
+			var socket = io.connect('http://localhost:1337');
+	        socket.on('Match.foundGame', function(roominfo) {
+	            console.log(roominfo);
+	            document.getElementById('roomid').innerHTML = roominfo;
+	        });
+	        socket.on('Server.startMatch', function(matchInfo) {
+	            console.log("MATCH INFO: " + matchInfo);
+	        });
+	        
+		        var username = document.getElementById('username').innerHTML;
+		        var roomid = document.getElementById('roomid').innerHTML;
+		        var gameObj;
+		        if (roomid == null || roomid === '') {
+		            gameObj = {
+		                username : username
+		            };
+		        }
+		        else {
+		            gameObj = {
+		                username : username,
+		                roomid : roomid
+		            };
+		        }
+		        socket.emit('Match.findGame', gameObj);
+		    
+	            
 
-				socket.on('room_id', function(room_id) {
-					room = room_id
-				})
-				socket.on('created_room', function() {
-					//TODO: tell user "waiting for opponent"
-				})
-
-				socket.on('startgame', function() {
-					//TODO: start the game
-				})
 				/*
 				if game is over...
 				room.on('leave', room);
 				*/
 				//TODO: implement sending data to backend
-		};
+		}
 
 
 

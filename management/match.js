@@ -8,6 +8,8 @@ function match(roomid, MAXPLAYERS) {
     this.playerCount = 0;
     this.MAXPLAYERS = MAXPLAYERS;
     this.board = boardmaker.board(99);
+    var that = this;
+    console.log("THIS: " +this);
 
     this.safeEmit = function(socket, type, message) {
         if (socket.isConnected()) {
@@ -109,7 +111,8 @@ function match(roomid, MAXPLAYERS) {
     }
     //Returns array [{ "id" : int, "enemy" : string, "spawnTime", float}]
     this.getBoardObj = function(startIndex) {
-        return this.board.getSegment(startIndex);
+        console.log("BOARD: " + that.board);
+        return that.board.getSegment(startIndex);
     }
     //Send signal of type type to every player
     //returns nothing
