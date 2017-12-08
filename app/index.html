@@ -155,6 +155,7 @@
 	<p id="roomid"></p>
 	<p id="notfication">Looking for opponent...</p>
 	<p id="opp_cookie"></p>
+
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
@@ -195,6 +196,7 @@
 				} else {
 					document.getElementById('opp_cookie').innerHTML = cookie1;					
 				}
+
 				console.log('startMatch', matchInfo);
 				//start game
 				document.getElementById('notfication').style.display = 'none';
@@ -212,6 +214,7 @@
 				if (summary.winner == document.cookie.split("=")[1]) {
 					console.log("ADDING WIN");
 					document.getElementById('notfication').style.display = 'block';
+
 					document.getElementById('notfication').innerHTML = 'You won!';
 
 					$(document).ready(function(){
@@ -235,6 +238,7 @@
 					document.getElementById('notfication').style.display = 'block';
 					document.getElementById('notfication').innerHTML = 'You lost!';
 				}
+
 				//leave
 				console.log("ENDMATCH SOCKET SHIT");
 				document.getElementById('roomid').innerHTML = '';

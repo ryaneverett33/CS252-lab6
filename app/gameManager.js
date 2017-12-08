@@ -37,6 +37,7 @@ function GameManager() {
         	case "ducked":
         		rivalPlayer.doneDuck();
         		break;
+
         }
     });
 
