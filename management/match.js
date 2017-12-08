@@ -109,8 +109,7 @@ function match(roomid, MAXPLAYERS) {
     }
     //Returns array [{ "id" : int, "enemy" : string, "spawnTime", float}]
     this.getBoardObj = function(startIndex) {
-        console.log("BOARD: " + that.board);
-        return that.board.getSegment(startIndex);
+        return this.board.getSegment(startIndex);
     }
     //Send signal of type type to every player
     //returns nothing
