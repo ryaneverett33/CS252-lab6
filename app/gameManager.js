@@ -112,7 +112,7 @@ function GameManager() {
 				document.getElementById("hs").style.display = "none";
 				document.getElementById("wins").style.display = "none";
 				document.getElementById("opWins").style.display = "none";
-				document.getElementById('notfication').style.display = 'block';
+				document.getElementById('notfication').style.display = 'none';
 
 
 				document.getElementById("mainMenu").style.display = "block";
