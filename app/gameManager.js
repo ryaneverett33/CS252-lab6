@@ -30,6 +30,14 @@ function GameManager() {
         	case "hit":
         		that.setState("MultiplayerDeathMenu");
         		document.getElementById('notfication').style.display = 'none';
+        		break;
+        	case "duck":
+        		rivalPlayer.duck();
+        		break;
+        	case "doneDuck":
+        		rivalPlayer.doneDuck();
+        		break;
+
         }
     });
 

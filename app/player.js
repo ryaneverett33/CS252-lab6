@@ -108,6 +108,15 @@ function Player(floorPosY) {
 
 		if(wasCroutching && !isCroutching) {
 			spritePosX = 76;
+			if (state == "Multiplayer") {
+				var roomid = document.getElementById("roomid").innerHTML;
+				var cookie = document.cookie.split("=")[1];
+				console.log("ROOM ID: " + document.getElementById('roomid').innerHTML);
+				console.log("OBJ: " + {roomid : roomid, username : cookie, action : "duck"});
+				socket.emit('Player.doneDuck', {roomid : roomid, username : cookie, action : "ducked"});
+				console.log("SENT DONE DUCK");
+			}
+
 		}
 
 		wasCroutching = isCroutching;
