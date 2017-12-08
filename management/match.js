@@ -10,7 +10,7 @@ function match(roomid, MAXPLAYERS) {
     this.board = new boardmaker.board(99);
 
     this.safeEmit = function(socket, type, message) {
-        if (socket.isConnected()) {
+        if (socket.connected) {
             socket.emit(type, message);
         }
         else {
