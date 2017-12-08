@@ -258,9 +258,9 @@ function GameManager() {
 				hs = json.highscore;
 				wins = json.wins;
 				if(request2.status === 200) { //200 status = success
-					document.getElementById("opp_wins").innerHTML = "Opponent Wins = " + wins;
+					document.getElementById("opWins").innerHTML = "Opponent Wins = " + wins;
 				} else { //invalid login credentials
-					document.getElementById("opp_wins").innerHTML = "Opponent Wins = N.A.";
+					document.getElementById("opWins").innerHTML = "Opponent Wins = N.A.";
 				}
 			});
 			request2.open("POST", "http://dinodash.azurewebsites.net/user/get");
