@@ -133,7 +133,6 @@
 	<div class="menu" id="mainMenu">
 		<p id="singlePlayerButton">Single player</p>
 		<p id="multiPlayerButton">Multiplayer</p>
-		<p>Options</p>
 	</div>
 
 	<div class="menu" id="singlePlayerDeathMenu" style="display: none;">
@@ -144,20 +143,25 @@
 	<div class="menu" id="singlePlayerDeathMenu" style="display: none;">
 		<p id="singlePlayerRestartButton">Restart</p>
 		<p id="mainMenuButton">Main menu</p>
+	</div>
+	<div class="menu" id="MultiplayerDeathMenu" style="display: none;">
+		<p id="mainMenuButtonMult">Main menu</p>
 	</div>
 	<p id="hs">Highscore: 10</p>
 	<p id="score">Score: 0</p>
 	<p id="wins">Wins: 0</p>
 	<p id="username"></p>
 	<p id="roomid"></p>
-
+	<p id="findinggame">Looking for opponent...</p>
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
 	<script src="player.js"></script>
+	<script src="rivalPlayer.js"></script>
 	<script src="gameManager.js"></script>
 	<script src="socket.io/socket.io.js"></script>
 	<script>
+		document.getElementById('roomid').style.display = 'none';
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
@@ -176,22 +180,36 @@
 	        socket.on('Match.foundGame', function(roominfo) {
 	            console.log('foundGame', roominfo);
 	            document.getElementById('roomid').innerHTML = roominfo.roomid;
+
 	        });
 	        socket.on('Server.startMatch', function(matchInfo) {
                 console.log('startMatch', matchInfo);
                 //start game
+                document.getElementById('findinggame').style.display = 'none';
 				gameManager.setState("Multiplayer");
 
             });
-            socket.on('Server.endMatch', function(endInfo) {
-                console.log('endMatch', endInfo);
+
+            socket.on('Server.endMatch', function(summary) {
+            	//add win if winner
+
+            	//leave
+            	console.log("ENDMATCH SOCKET SHIT");
+            	document.getElementById('roomid').innerHTML = '';
             });
+
             socket.on('Match.boardUpdate', function(boardObj) {
                 console.log('boardUpdate', boardObj);
             });
-            socket.on('Match.playerUpdate', function(playerObj) {
+            /*socket.on('Match.playerUpdate', function(playerObj) {
                 console.log('playerUpdate', playerObj);
-            });
+
+                switch(playerObj.action) {
+                	case "jump":
+
+                		break;
+                }
+            });*/
             socket.on('Match.error', function(errorObj) {
                 console.log('Matcherror', errorObj);
             });
@@ -217,6 +235,8 @@
 	            };
 	        }
 	        socket.emit('Match.findGame', gameObj);
+	        document.getElementById('findinggame').style.display = 'block';
+
 		}
 
 
@@ -226,6 +246,9 @@
 		};
 
 		document.getElementById("mainMenuButton").onclick = function() {
+			gameManager.setState("mainMenu");
+		};
+		document.getElementById("mainMenuButtonMult").onclick = function() {
 			gameManager.setState("mainMenu");
 		};
 

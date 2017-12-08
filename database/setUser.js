@@ -41,7 +41,7 @@ function set(column, newvalue, name, callback) {
     }
 
     else if (column === 'Wins') {
-      request = new Request("UPDATE users SET Wins = @Value WHERE Name = @Name;", function (err) {
+      request = new Request("UPDATE users SET Wins = @Value WHERE Name = @Name;", function (err, rowcount) {
         if (err) {
           console.log(err);
           connection.release();

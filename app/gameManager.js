@@ -8,15 +8,31 @@ function GameManager() {
 	var score = 0;
 	var increaseScoreInterval = 1; //seconds
 	var scoreIntervalRet;
+	var won = false;
 	//var highscore_string = document.getElementById("hs").innerHTML;
 	//parseInt("10") + "<br>";
 	//console.log(highscore);
 	var newHS = false;
+	var that = this;
 
 	Input.getInstance().init(canvasElement);
 
 	var enemyManager = new EnemyManager(floorPosY, width);
 	var player = new Player(floorPosY);
+	var rivalPlayer = new RivalPlayer(floorPosY);
+
+	socket.on('Match.playerUpdate', function(playerObj) {
+        console.log('playerUpdate', playerObj);
+
+        switch(playerObj.action) {
+        	case "jump":
+        		rivalPlayer.jump();
+        		break;
+        	case "hit":
+        	    won = true;
+        		that.setState("MultiplayerDeathMenu");
+        }
+    });
 
 	function increaseScore() {
 		score++;
@@ -35,6 +51,51 @@ function GameManager() {
 		}
 	}
 
+	/*function multDeathMenuSetup() {
+		document.getElementById("MultiplayerDeathMenu").style.display = "block";
+		window.clearInterval(scoreIntervalRet);
+		console.log("GAME OVER");
+
+		if (newHS) {
+			//set new highscore in database
+			$(document).ready(function(){
+				var request = new XMLHttpRequest();
+				request.addEventListener("load", function () {
+					var recieved = this.responseText;
+					var json = JSON.parse(recieved);
+					if(request.status === 200) { //200 status = success
+						console.log("Set user endpoint success");
+					} else { //invalid login credentials
+						console.log("Set user endpoint failure");
+					}
+				});
+				//request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+				request.open("POST", "http://localhost:1337/user/set");
+
+				request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
+			});
+		}
+		if (won) {
+			console.log("ADDING WIN");
+			$(document).ready(function(){
+				var wins = parseInt(/\d+/.exec(document.getElementById("wins").innerHTML));
+				var request = new XMLHttpRequest();
+				request.addEventListener("load", function () {
+					var recieved = this.responseText;
+					var json = JSON.parse(recieved);
+					if(request.status === 200) { //200 status = success
+						console.log("Set user endpoint success");
+					} else { //invalid login credentials
+						console.log("Set user endpoint failure");
+					}
+				});
+				//request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+				request.open("POST", "http://localhost:1337/user/set");
+				request.send(JSON.stringify({ "column": "Wins", "value": wins, "cookie": document.cookie.split("=")[1] }));		
+			});
+		}
+	}*/
+
 	this.setState =  function(newState) {
 		state = newState;
 
@@ -45,6 +106,8 @@ function GameManager() {
 				document.getElementById("hs").style.display = "none";
 				document.getElementById("wins").style.display = "none";
 				document.getElementById("mainMenu").style.display = "block";
+				document.getElementById("MultiplayerDeathMenu").style.display = "none";
+				canvas.clearRect(0, 0, width, height);
 
 				break;
 			case "singlePlayer":
@@ -69,6 +132,7 @@ function GameManager() {
 				enemyManager.init();
 				score = 0;
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
+				won = false;
 				document.getElementById("score").style.display = "block";
 				document.getElementById("score").innerHTML = "Score: 0";
 				document.getElementById("hs").style.display = "block";
@@ -101,8 +165,52 @@ function GameManager() {
 
 						request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
 					});
-				break;
 				}
+				break;
+		    case "MultiplayerDeathMenu":
+				document.getElementById("MultiplayerDeathMenu").style.display = "block";
+				window.clearInterval(scoreIntervalRet);
+				console.log("GAME OVER");
+
+				if (newHS) {
+					//set new highscore in database
+					$(document).ready(function(){
+						var request = new XMLHttpRequest();
+						request.addEventListener("load", function () {
+							var recieved = this.responseText;
+							var json = JSON.parse(recieved);
+							if(request.status === 200) { //200 status = success
+								console.log("Set user endpoint success");
+							} else { //invalid login credentials
+								console.log("Set user endpoint failure");
+							}
+						});
+						//request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						request.open("POST", "http://localhost:1337/user/set");
+
+						request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
+					});
+				}
+				/*if (won) {
+					console.log("ADDING WIN");
+					$(document).ready(function(){
+						var wins = parseInt(/\d+/.exec(document.getElementById("wins").innerHTML));
+						var request = new XMLHttpRequest();
+						request.addEventListener("load", function () {
+							var recieved = this.responseText;
+							var json = JSON.parse(recieved);
+							if(request.status === 200) { //200 status = success
+								console.log("Set user endpoint success");
+							} else { //invalid login credentials
+								console.log("Set user endpoint failure");
+							}
+						});
+						//request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						request.open("POST", "http://localhost:1337/user/set");
+						request.send(JSON.stringify({ "column": "Wins", "value": wins, "cookie": document.cookie.split("=")[1] }));		
+					});
+				}*/
+
 		}
 	}
 
@@ -117,6 +225,7 @@ function GameManager() {
 			case "Multiplayer":
 				var playerBB = player.getBoundingBox();
 				enemyManager.update(playerBB.posX, playerBB.posY - playerBB.height, playerBB.width, playerBB.height, state);
+				rivalPlayer.update();
 				player.update(state);
 				//get player info
 
@@ -151,6 +260,7 @@ function GameManager() {
 				canvas.clearRect(0, 0, width, height);
 
 				enemyManager.draw();
+				rivalPlayer.draw();
 				player.draw();
 
 				//ground
