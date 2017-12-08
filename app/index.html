@@ -161,7 +161,7 @@
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
-
+		var socket = io.connect('http://localhost:1337');
 		var gameManager = new GameManager();
 		gameManager.setState("mainMenu");
 
@@ -172,38 +172,51 @@
 		document.getElementById("multiPlayerButton").onclick = function() {
 			//connect to socket on backend
 			//var socket = io.connect('http://dinodash.azurewebsites.net');
-			var socket = io.connect('http://localhost:1337');
+			
 	        socket.on('Match.foundGame', function(roominfo) {
-	            console.log(roominfo);
-	            document.getElementById('roomid').innerHTML = roominfo;
+	            console.log('foundGame', roominfo);
+	            document.getElementById('roomid').innerHTML = roominfo.roomid;
 	        });
 	        socket.on('Server.startMatch', function(matchInfo) {
-	            console.log("MATCH INFO: " + matchInfo);
-	        });
-	        
-		        var username = document.getElementById('username').innerHTML;
-		        var roomid = document.getElementById('roomid').innerHTML;
-		        var gameObj;
-		        if (roomid == null || roomid === '') {
-		            gameObj = {
-		                username : username
-		            };
-		        }
-		        else {
-		            gameObj = {
-		                username : username,
-		                roomid : roomid
-		            };
-		        }
-		        socket.emit('Match.findGame', gameObj);
-		    
-	            
+                console.log('startMatch', matchInfo);
+                //start game
+				gameManager.setState("Multiplayer");
 
-				/*
-				if game is over...
-				room.on('leave', room);
-				*/
-				//TODO: implement sending data to backend
+            });
+            socket.on('Server.endMatch', function(endInfo) {
+                console.log('endMatch', endInfo);
+            });
+            socket.on('Match.boardUpdate', function(boardObj) {
+                console.log('boardUpdate', boardObj);
+            });
+            socket.on('Match.playerUpdate', function(playerObj) {
+                console.log('playerUpdate', playerObj);
+            });
+            socket.on('Match.error', function(errorObj) {
+                console.log('Matcherror', errorObj);
+            });
+            socket.on('Player.error', function(errorObj) {
+                console.log('Player error', errorObj);
+            });
+            socket.on('Player.dead', function(deadObj) {
+                console.log('Playerdead', deadObj);
+            });
+	        
+	        var username = document.cookie.split("=")[1];
+	        var roomid = document.getElementById('roomid').innerHTML;
+	        var gameObj;
+	        if (roomid == null || roomid === '') {
+	            gameObj = {
+	                username : username
+	            };
+	        }
+	        else {
+	            gameObj = {
+	                username : username,
+	                roomid : roomid
+	            };
+	        }
+	        socket.emit('Match.findGame', gameObj);
 		}
 
 

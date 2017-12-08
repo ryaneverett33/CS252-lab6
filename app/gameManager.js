@@ -63,6 +63,22 @@ function GameManager() {
 				canvasElement.focus();
 
 				break;
+			case "Multiplayer":
+				player.posY = floorPosY;
+				player.velY = 0;
+				enemyManager.init();
+				score = 0;
+				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
+				document.getElementById("score").style.display = "block";
+				document.getElementById("score").innerHTML = "Score: 0";
+				document.getElementById("hs").style.display = "block";
+				document.getElementById("wins").style.display = "block";
+
+				document.getElementById("mainMenu").style.display = "none";
+				document.getElementById("singlePlayerDeathMenu").style.display = "none";
+				canvasElement.focus();
+
+				break;
 			case "singlePlayerDeathMenu":
 				document.getElementById("singlePlayerDeathMenu").style.display = "block";
 				window.clearInterval(scoreIntervalRet);
@@ -94,10 +110,18 @@ function GameManager() {
 		switch(state) {
 			case "singlePlayer":
 				var playerBB = player.getBoundingBox();
-				enemyManager.update(playerBB.posX, playerBB.posY - playerBB.height, playerBB.width, playerBB.height);
-				player.update();
+				enemyManager.update(playerBB.posX, playerBB.posY - playerBB.height, playerBB.width, playerBB.height, state);
+				player.update(state);
 
 				break;
+			case "Multiplayer":
+				var playerBB = player.getBoundingBox();
+				enemyManager.update(playerBB.posX, playerBB.posY - playerBB.height, playerBB.width, playerBB.height, state);
+				player.update(state);
+				//get player info
+
+				//send to socketio
+
 			case "singlePlayerDeath":
 
 		}
@@ -121,8 +145,25 @@ function GameManager() {
 				canvas.stroke();
 
 				break;
+		
+
+		case "Multiplayer":
+				canvas.clearRect(0, 0, width, height);
+
+				enemyManager.draw();
+				player.draw();
+
+				//ground
+				canvas.beginPath();
+				canvas.moveTo(0, floorPosY);
+				canvas.lineTo(width, floorPosY);
+				canvas.lineWidth = 5;
+				canvas.stroke();
+				break;
 		}
+
 	}
+	
 
 	this.start = function() {
 		setInterval(function() {
