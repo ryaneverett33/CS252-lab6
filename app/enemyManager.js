@@ -20,7 +20,7 @@ function EnemyManager(floorPosY, canvasWidth) {
 	this.init = function(state, newSeed) {
 		enemies.length = 0;
 		clearInterval(ret);
-		ret = setInterval(that.spawnEnemy(state), 1000);
+		ret = setInterval(that.spawnEnemy, 1000);
 		this.speed = initSpeed;
 		this.minTime = initMinTime;
 
