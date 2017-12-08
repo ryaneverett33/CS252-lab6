@@ -150,9 +150,11 @@
 	<p id="hs">Highscore: 10</p>
 	<p id="score">Score: 0</p>
 	<p id="wins">Wins: 0</p>
+	<p id="opWins">Opponent wins: 0</p>
 	<p id="username"></p>
 	<p id="roomid"></p>
 	<p id="notfication">Looking for opponent...</p>
+	<p id="opp_cookie"></p>
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
@@ -162,6 +164,8 @@
 	<script src="socket.io/socket.io.js"></script>
 	<script>
 		document.getElementById('roomid').style.display = 'none';
+		document.getElementById('opp_cookie').style.display = 'none';
+
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
@@ -183,6 +187,14 @@
 
 			});
 			socket.on('Server.startMatch', function(matchInfo) {
+				cookie1 = matchInfo.players[0];
+				cookie2 = matchInfo.players[1];
+				//get enemy username in order to get their stats
+				if (cookie1 == document.cookie.split("=")[1]) {
+					document.getElementById('opp_cookie').innerHTML = cookie2;
+				} else {
+					document.getElementById('opp_cookie').innerHTML = cookie1;					
+				}
 				console.log('startMatch', matchInfo);
 				//start game
 				document.getElementById('notfication').style.display = 'none';
@@ -193,9 +205,13 @@
 			});
 
 			socket.on('Server.endMatch', function(summary) {
+				//set opponent wins to null
+				document.getElementById('opp_cookie').innerHTML = "";					
+
 				//add win if winner
-				if (summary.winner == document.cookie.split("=")[1])
+				if (summary.winner == document.cookie.split("=")[1]) {
 					console.log("ADDING WIN");
+					document.getElementById('notfication').style.display = 'block';
 					document.getElementById('notfication').innerHTML = 'You won!';
 
 					$(document).ready(function(){
@@ -215,6 +231,10 @@
 						//request.open("POST", "http://localhost:1337/user/set");
 						request.send(JSON.stringify({ "column": "Wins", "value": wins, "cookie": document.cookie.split("=")[1] }));		
 					});
+				} else {
+					document.getElementById('notfication').style.display = 'block';
+					document.getElementById('notfication').innerHTML = 'You lost!';
+				}
 				//leave
 				console.log("ENDMATCH SOCKET SHIT");
 				document.getElementById('roomid').innerHTML = '';
