@@ -103,10 +103,10 @@ function GameManager() {
 		}
 	}*/
 
-	this.setState =  function(newState) {
+	this.setState =  function(newState, seed) {
 		state = newState;
 
-		switch(state, seed) {
+		switch(state) {
 			case "mainMenu":
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
 				document.getElementById("score").style.display = "none";
