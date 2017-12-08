@@ -14,9 +14,6 @@ function match(roomid, MAXPLAYERS) {
         if (socket.connected) {
             socket.emit(type, message);
         }
-        else {
-            console.log("Socket disconnected, could not emit");
-        }
     }
     //returns a boolean if the room contains the user or not
     this.containsPlayer = function(username) {
@@ -249,14 +246,15 @@ function match(roomid, MAXPLAYERS) {
         this.sendToPlayers("Server.endMatch", matchOverObj);
         this.playing = false;
     }
+    //returns username
     this.containsSocket = function(socket) {
         for (var i = 0; i < this.playerCount; i++) {
             var player = this.players[i];
             if (player.socket === socket) {
-                return true;
+                return player.username;
             }
         }
-        return false;
+        return null;
     }
     //Sends a start signal to all the players and initalizes the board
     //Start obj : {roomid: int, playerCount: int, players: [usernames]}
