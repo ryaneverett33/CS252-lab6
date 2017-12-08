@@ -34,6 +34,23 @@ function generateRoomid() {
     return roomid;
 }
 
+//Checks if a game has finished or not
+function isMatchOver(match) {
+    if (match == null) {
+        return true;
+    }
+    return match.isGameOver();
+}
+//Removes a finished game, ASSUMES isMatchOver HAS BEEN CALLED PRIOR
+function finishGame(match) {
+    if (match == null) {
+        return;
+    }
+    console.log("Game over!, removing from currentGames");
+    currentGames[match.roomid] = null;
+    currentGameCount--;
+}
+
 //returns a new match for adding a player to
 function findOpenRoom(roomid) {
     console.log("Finding open room");
@@ -135,24 +152,31 @@ function getRoom(roomid) {
     }
     return currentGames[roomid];
 }
+//returns a match that is open
+function getOpenRoom(roomid) {
+    if (roomid == null) {
+        return null;
+    }
+    return openGames[roomid];
+}
 //actionObj { "roomid" : int, "username" : string, "action" : "jump|duck|hit"}
 function handlePlayerAction(socket, actionObj) {
     //get match 
     console.log(actionObj);
     if (actionObj.roomid == null) {
+        console.log("HandlePlayerAction was given an invalid object, roomid is null");
         socket.emit("Player.error", { error : "Roomid is invalid"});
         return;
     }
     var match = getRoom(actionObj.roomid);
     if (match == null) {
+        console.log("HandlePlayerAction couldn't get match");
         socket.emit("Player.error", { error : "Roomid is invalid"});
         return;
     }
     match.handlePlayerAction(socket, actionObj);
-    if (match.isGameOver()) {
-        //remove from currentGames
-        console.log("Game over, remove from currentGames");
-        currentGames[actionObj.roomid] = null;
+    if (isMatchOver(match)) {
+        finishGame(match);
     }
 }
 //boardObj { "roomid" : int, "distance" : int}
@@ -167,9 +191,9 @@ function getBoard(socket, boardObj) {
         socket.emit("Match.error", { error : "Roomid is invalid"});
         return;
     }
-    if (!match.getBoard(boardObj)) {
-        socket.emit("Match.error", { error : "Failed to leave match"});
-        return;
+    match.getBoard(socket, boardObj);
+    if (isMatchOver(match)) {
+        finishGame(match);
     }
 }
 
@@ -180,7 +204,12 @@ function getPlayers(socket, getPlayersObj) {
         socket.emit("Match.error", { error : "Roomid is invalid"});
         return;
     }
-    var match = getRoom(getPlayersObj.roomid);
+    var match;
+    match = getRoom(getPlayersObj.roomid);
+    if (match == null) {
+        //check if the game hasn't started yet
+        match = getOpenRoom(getPlayersObj.roomid);
+    }
     if (match == null) {
         socket.emit("Match.error", { error : "Roomid is invalid"});
         return;
@@ -191,13 +220,15 @@ function getPlayers(socket, getPlayersObj) {
         return;
     }
     else {
-        socket.emit("Match.players", { players : JSON.stringify(players) });
-        return;
+        socket.emit("Match.players", { players : players });
+        if (isMatchOver(match)) {
+            finishGame(match);
+        }
     }
 }
 //leaveObj { "roomid" : int, "username" : string }
-function leaveMatch(leaveObj) {
-    console.log("Recieved: " + leaveObj);
+function leaveMatch(socket, leaveObj) {
+    console.log(leaveObj);
     if (leaveObj.roomid == null) {
         socket.emit("Match.error", { error : "Roomid is invalid"});
         return;
@@ -206,12 +237,20 @@ function leaveMatch(leaveObj) {
         socket.emit("Match.error", { error : "Username is invalid"});
         return;
     }
-    var match = getRoom(leaveObj.roomid);
+    var match;
+    match = getRoom(leaveObj.roomid);
+    if (match == null) {
+        //check if the game hasn't started yet
+        match = getOpenRoom(leaveObj.roomid);
+    }
     if (match == null) {
         socket.emit("Match.error", { error : "Roomid is invalid"});
         return;
     }
     match.leave(leaveObj.username);
+    if (isMatchOver(match)) {
+        finishGame(match);
+    }
 }
 exports.init = function(io) {
     socketobj = io;

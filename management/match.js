@@ -8,6 +8,7 @@ function match(roomid, MAXPLAYERS) {
     this.playerCount = 0;
     this.MAXPLAYERS = MAXPLAYERS;
     this.board = new boardmaker.board(99);
+    this.playing = false;
 
     this.safeEmit = function(socket, type, message) {
         if (socket.connected) {
@@ -47,7 +48,6 @@ function match(roomid, MAXPLAYERS) {
     };
     //Returns boolean if successful connection
     this.join = function(username, socket) {
-        console.log("Attempting to join: %d", this.roomid);
         if (this.containsPlayer(username)) {
             console.log("Aready contains player");
             return false;
@@ -63,6 +63,7 @@ function match(roomid, MAXPLAYERS) {
         };
         this.players.push(playerObj);
         this.playerCount++;
+        console.log("%s joined match %d", username, this.roomid);
         return true;
     };
     //Returns boolean if successful leave
@@ -75,13 +76,36 @@ function match(roomid, MAXPLAYERS) {
             console.log("leave() contains username but recieved an incorrect index");
             return false;
         }
-        this.killPlayer(username);
-        if (this.isGameOver()) {
-            this.sendGameOver(this.getWinner());
+        if (this.playing) {
+            //kill the player
+            this.killPlayer(username);
+            if (this.isGameOver()) {
+                this.sendGameOver(this.getWinner());
+            }
+            console.log("%s left %d during play", username, this.roomid);
+            return true;
         }
-        return true;
-        /*this.players.slice(index, 0);
-        return true;*/
+        else {
+            //remove from lobby
+            var playersCopy = new Array(this.players.length - 1);
+            for (var i = 0; i < this.playerCount; i++) {
+                var player = this.players[i];
+                if (player.username !== username) {
+                    playersCopy.push(player);
+                }
+                else {
+                    //the actual player
+                    this.safeEmit(player.socket, "Match.left", {
+                        roomid : this.roomid
+                    });
+                }
+            }
+            this.playerCount--;
+            this.players = playersCopy;
+            console.log("%s left %d while in the lobby", username, this.roomid);
+            return true;
+        }
+        
     };
     //Returns true if match will be full on next join, false otherwise
     this.willBeFull = function() {
@@ -177,7 +201,7 @@ function match(roomid, MAXPLAYERS) {
             this.safeEmit(socket, 'Match.error', { error : "Invalid board distance" })
         }
         else {
-            this.safeEmit(socket, 'Match.boardUpdate', board.getSegment(boardObj.distance));
+            this.safeEmit(socket, 'Match.boardUpdate', this.board.getSegment(boardObj.distance));
         }
     }
     //returns true/false
@@ -218,10 +242,12 @@ function match(roomid, MAXPLAYERS) {
         return null;
     }
     this.sendGameOver = function(winner) {
+        console.log("%s won game %d", winner, this.roomid);
         var matchOverObj = {
             winner : winner
         };
         this.sendToPlayers("Server.endMatch", matchOverObj);
+        this.playing = false;
     }
     this.containsSocket = function(socket) {
         for (var i = 0; i < this.playerCount; i++) {
@@ -239,6 +265,7 @@ function match(roomid, MAXPLAYERS) {
         //Generate start obj with board info and match info
         //Tell players the match has started
         this.sendToPlayers('Server.startMatch', this.getMatchObj());
+        this.playing = true;
     }
 }
 exports.match = match;

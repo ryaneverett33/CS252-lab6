@@ -14,7 +14,7 @@ function board(SEGMENT_SIZE) {
             segment.generate();
             this.segments[this.segmentCount] = segment;
             this.segmentCount++;
-            return segment.serialize(this.segmentCount - 1);
+            return segment.toObj(this.segmentCount - 1);
         }
         else {
             //return generated segment
