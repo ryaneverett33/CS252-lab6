@@ -143,6 +143,7 @@ function GameManager() {
 				player.velY = 0;
 				enemyManager.init(state, seed);
 				score = 0;
+				clearInterval(scoreIntervalRet);
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
 				document.getElementById("score").style.display = "block";
 				document.getElementById("score").innerHTML = "Score: 0";

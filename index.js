@@ -20,7 +20,8 @@ function routerInit() {
 
 routerInit();
 pool.init();
-var port = process.env.PORT || 1337;
+//var port = process.env.PORT || 1337;
+var port = 80;
 server = http.createServer(router);
 server.listen(port);
 var io = require("socket.io")(server);
