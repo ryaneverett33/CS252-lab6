@@ -1,5 +1,4 @@
-var segmentmaker = require('./segment.js');
-
+var segmentmaker = require('./../management/segment.js');
 //Describes a board that the players interact on
 function board(SEGMENT_SIZE) {
     this.segments = [];
@@ -11,10 +10,10 @@ function board(SEGMENT_SIZE) {
             //generate new segment and return it
             //client should already have 
             console.log("Generating a new segment");
-            var segment = segmentmaker.segment(segmentCount, SEGMENT_SIZE);
+            var segment = new segmentmaker.segment(this.segmentCount, this.SEGMENT_SIZE);
             segment.generate();
             this.segments[this.segmentCount] = segment;
-            segmentCount++;
+            this.segmentCount++;
             return segment.serialize(this.segmentCount - 1);
         }
         else {

@@ -1,4 +1,4 @@
-var boardmaker = require('./board.js');
+var boardmaker = require('./../management/board.js');
 
 function match(roomid, MAXPLAYERS) {
     console.log("Creating match: %d with maxplayers: %d", roomid, MAXPLAYERS);
@@ -7,9 +7,7 @@ function match(roomid, MAXPLAYERS) {
     this.players = [];
     this.playerCount = 0;
     this.MAXPLAYERS = MAXPLAYERS;
-    this.board = boardmaker.board(99);
-    var that = this;
-    console.log("THIS: " +this);
+    this.board = new boardmaker.board(99);
 
     this.safeEmit = function(socket, type, message) {
         if (socket.isConnected()) {
