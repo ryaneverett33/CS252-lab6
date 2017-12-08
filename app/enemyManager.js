@@ -35,7 +35,7 @@ function EnemyManager(floorPosY, canvasWidth) {
 		ret = setInterval(that.spawnEnemy, that.minTime + Math.random() * that.randInterval);
 	}
 
-	this.update = function(playerPosX, playerPosY, playerWidth, playerHeight) {
+	this.update = function(playerPosX, playerPosY, playerWidth, playerHeight, state) {
 		//must start from the end to avoid issues with removing enemy mid-iteration
 		for(var i = enemies.length - 1; i >= 0; i--) {
 			var e = enemies[i];
@@ -52,7 +52,14 @@ function EnemyManager(floorPosY, canvasWidth) {
 			if(hasCollision(playerPosX, playerWidth, enemyBB.posX, enemyBB.width, playerPosY, playerHeight, enemyBB.posY, enemyBB.height)) {
 				//draw one more frame
 				gameManager.draw();
-
+				if (state == "Multiplayer") {
+					var roomid = document.getElementById("roomid").innerHTML;
+					var cookie = document.cookie.split("=")[1];
+					console.log("ROOM ID: " + document.getElementById('roomid').innerHTML);
+					console.log("OBJ: " + {roomid : roomid, username : cookie, action : "hit"});
+					socket.emit('Player.hit', {roomid : roomid, username : cookie, action : "hit"});
+					console.log("SENT HIT");
+				}
 				gameManager.setState("singlePlayerDeathMenu");
 
 			}

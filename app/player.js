@@ -4,7 +4,6 @@ function Player(floorPosY) {
 	var velX =  0;
 	this.velY = 0;
 	var jumpVel = 12;
-	var color = "blue";
 	var gravity = 0.5;
 	var onFloor = false;
 	var spriteSheet = new Image();
@@ -36,10 +35,18 @@ function Player(floorPosY) {
 		return bb;
 	}
 
-	this.update = function() {
+	this.update = function(state) {
 		if(onFloor && Input.getInstance().isKeyPressed(38)) {
 			this.velY = -jumpVel;
 			onFloor = false;
+			if (state == "Multiplayer") {
+				var roomid = document.getElementById("roomid").innerHTML;
+				var cookie = document.cookie.split("=")[1];
+				console.log("ROOM ID: " + document.getElementById('roomid').innerHTML);
+				console.log("OBJ: " + {roomid : roomid, username : cookie, action : "jump"});
+				socket.emit('Player.jump', {roomid : roomid, username : cookie, action : "jump"});
+				console.log("SENT JUMP");
+			}
 		}
 
 		var isCroutching = false;
@@ -87,6 +94,16 @@ function Player(floorPosY) {
 
 		if(!wasCroutching && isCroutching) {
 			spritePosX = 414;
+
+			if (state == "Multiplayer") {
+				var roomid = document.getElementById("roomid").innerHTML;
+				var cookie = document.cookie.split("=")[1];
+				console.log("ROOM ID: " + document.getElementById('roomid').innerHTML);
+				console.log("OBJ: " + {roomid : roomid, username : cookie, action : "duck"});
+				socket.emit('Player.duck', {roomid : roomid, username : cookie, action : "duck"});
+				console.log("SENT DUCK");
+
+			}
 		}
 
 		if(wasCroutching && !isCroutching) {
@@ -97,8 +114,6 @@ function Player(floorPosY) {
 	}
 
 	this.draw = function() {
-		//canvas.fillStyle = color;
-		//canvas.fillRect(this.posX, this.posY - this.currHeight, this.width, this.currHeight);
 		canvas.drawImage(spriteSheet,
 			spritePosX,
 			spritePosY,

@@ -18,6 +18,9 @@ function board(SEGMENT_SIZE) {
         }
         else {
             //return generated segment
+            console.log("PRE RETURN BOARD: ");
+            console.log(this.segments[this.segmentCount - 1].serialize(this.segmentCount -1));
+            console.log("POST RETURN BOARD.");
             return this.segments[this.segmentCount - 1].serialize(this.segmentCount -1 );
         }
     }

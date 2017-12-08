@@ -37,6 +37,19 @@ p:hover {
 	top: 4px;
 }
 
+#username {
+	position: absolute;
+	left: 50%;
+	top: 4px;
+}
+
+#findinggame {
+	position: absolute;
+	left: 41%;
+	top: 29px;
+	display: none;
+}
+
 .login{
    position:absolute;
    top:4px;

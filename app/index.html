@@ -133,7 +133,6 @@
 	<div class="menu" id="mainMenu">
 		<p id="singlePlayerButton">Single player</p>
 		<p id="multiPlayerButton">Multiplayer</p>
-		<p>Options</p>
 	</div>
 
 	<div class="menu" id="singlePlayerDeathMenu" style="display: none;">
@@ -145,21 +144,28 @@
 		<p id="singlePlayerRestartButton">Restart</p>
 		<p id="mainMenuButton">Main menu</p>
 	</div>
-	<p id="hs">Highscore: 0</p>
+	<div class="menu" id="MultiplayerDeathMenu" style="display: none;">
+		<p id="mainMenuButtonMult">Main menu</p>
+	</div>
+	<p id="hs">Highscore: 10</p>
 	<p id="score">Score: 0</p>
 	<p id="wins">Wins: 0</p>
-
+	<p id="username"></p>
+	<p id="roomid"></p>
+	<p id="findinggame">Looking for opponent...</p>
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
 	<script src="player.js"></script>
+	<script src="rivalPlayer.js"></script>
 	<script src="gameManager.js"></script>
 	<script src="socket.io/socket.io.js"></script>
 	<script>
+		document.getElementById('roomid').style.display = 'none';
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
-
+		var socket = io.connect('http://dinodash.azurewebsites.net/');
 		var gameManager = new GameManager();
 		gameManager.setState("mainMenu");
 
@@ -168,30 +174,88 @@
 		};
 
 		document.getElementById("multiPlayerButton").onclick = function() {
-				//connect to socket on backend
-				var socket = io.connect('http://dinodash.azurewebsites.net');
-				var room;
-				//once socket is connected, find a game (code on server.js)
-				socket.on('connect', function(){
-				    socket.emit('find_game');
-				});
+			//connect to socket on backend
+			//var socket = io.connect('http://dinodash.azurewebsites.net');
+			
+	        socket.on('Match.foundGame', function(roominfo) {
+	            console.log('foundGame', roominfo);
+	            document.getElementById('roomid').innerHTML = roominfo.roomid;
 
-				socket.on('room_id', function(room_id) {
-					room = room_id
-				})
-				socket.on('created_room', function() {
-					//TODO: tell user "waiting for opponent"
-				})
+	        });
+	        socket.on('Server.startMatch', function(matchInfo) {
+                console.log('startMatch', matchInfo);
+                //start game
+                document.getElementById('findinggame').style.display = 'none';
+				gameManager.setState("Multiplayer");
 
-				socket.on('startgame', function() {
-					//TODO: start the game
-				})
-				/*
-				if game is over...
-				room.on('leave', room);
-				*/
-				//TODO: implement sending data to backend
-		};
+            });
+
+            socket.on('Server.endMatch', function(summary) {
+            	//add win if winner
+            	if (summary.winner == document.cookie.split("=")[1])
+					console.log("ADDING WIN");
+					$(document).ready(function(){
+						var wins = parseInt(/\d+/.exec(document.getElementById("wins").innerHTML));
+						console.log("CURRENT WINS: " + wins);
+						var request = new XMLHttpRequest();
+						request.addEventListener("load", function () {
+							var recieved = this.responseText;
+							var json = JSON.parse(recieved);
+							if(request.status === 200) { //200 status = success
+								console.log("Set user endpoint success");
+							} else { //invalid login credentials
+								console.log("Set user endpoint failure");
+							}
+						});
+						request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						//request.open("POST", "http://localhost:1337/user/set");
+						request.send(JSON.stringify({ "column": "Wins", "value": wins, "cookie": document.cookie.split("=")[1] }));		
+					});
+            	//leave
+            	console.log("ENDMATCH SOCKET SHIT");
+            	document.getElementById('roomid').innerHTML = '';
+            });
+
+            socket.on('Match.boardUpdate', function(boardObj) {
+                console.log('boardUpdate', boardObj);
+            });
+            /*socket.on('Match.playerUpdate', function(playerObj) {
+                console.log('playerUpdate', playerObj);
+
+                switch(playerObj.action) {
+                	case "jump":
+
+                		break;
+                }
+            });*/
+            socket.on('Match.error', function(errorObj) {
+                console.log('Matcherror', errorObj);
+            });
+            socket.on('Player.error', function(errorObj) {
+                console.log('Player error', errorObj);
+            });
+            socket.on('Player.dead', function(deadObj) {
+                console.log('Playerdead', deadObj);
+            });
+	        
+	        var username = document.cookie.split("=")[1];
+	        var roomid = document.getElementById('roomid').innerHTML;
+	        var gameObj;
+	        if (roomid == null || roomid === '') {
+	            gameObj = {
+	                username : username
+	            };
+	        }
+	        else {
+	            gameObj = {
+	                username : username,
+	                roomid : roomid
+	            };
+	        }
+	        socket.emit('Match.findGame', gameObj);
+	        document.getElementById('findinggame').style.display = 'block';
+
+		}
 
 
 
@@ -200,6 +264,9 @@
 		};
 
 		document.getElementById("mainMenuButton").onclick = function() {
+			gameManager.setState("mainMenu");
+		};
+		document.getElementById("mainMenuButtonMult").onclick = function() {
 			gameManager.setState("mainMenu");
 		};
 
