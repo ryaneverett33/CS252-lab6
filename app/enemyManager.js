@@ -30,8 +30,8 @@ function EnemyManager(floorPosY, canvasWidth) {
 	}
 
 	this.spawnEnemy = function() {
-		var rand = Math.random();
-		//var rand = random();
+		//var rand = Math.random();
+		var rand = random();
 
 		if(rand > 0.5) {
 			var e = new Enemy(floorPosY, canvasWidth, "floor");
@@ -42,9 +42,9 @@ function EnemyManager(floorPosY, canvasWidth) {
 			enemies.push(e);
 		}
 
-		//clearInterval(ret);
+		clearInterval(ret);
 		//ret = setInterval(that.spawnEnemy, that.minTime + Math.random() * that.randInterval);
-		//ret = setInterval(that.spawnEnemy, that.minTime + random() * that.randInterval);
+		ret = setInterval(that.spawnEnemy, that.minTime + random() * that.randInterval);
 		//console.log()
 		//console.log(random());
 	}
