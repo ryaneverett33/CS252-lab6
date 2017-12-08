@@ -4,10 +4,28 @@
         <script type="text/javascript" >
             var socket = io();
             socket.on('Match.foundGame', function(roominfo) {
-                console.log(roominfo);
+                console.log('foundGame', roominfo);
             });
             socket.on('Server.startMatch', function(matchInfo) {
-                console.log(matchInfo)
+                console.log('startMatch', matchInfo)
+            });
+            socket.on('Server.endMatch', function(endInfo) {
+                console.log('endMatch', endInfo);
+            });
+            socket.on('Match.boardUpdate', function(boardObj) {
+                console.log('boardUpdate', boardObj);
+            });
+            socket.on('Match.playerUpdate', function(playerObj) {
+                console.log('playerUpdate', playerObj);
+            });
+            socket.on('Match.error', function(errorObj) {
+                console.log('Matcherror', errorObj);
+            });
+            socket.on('Player.error', function(errorObj) {
+                console.log('Player error', errorObj);
+            });
+            socket.on('Player.dead', function(deadObj) {
+                console.log('Playerdead', deadObj);
             });
             function joinGame() {
                 var username = document.getElementById('username').value;

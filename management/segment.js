@@ -1,20 +1,12 @@
 //Describes a chunk of the board
 function segment(id, size) {
-    this.id = 0;
-    this.size = 0;
-    this.chunks = null;
+    this.id = id;
+    this.size = size;
+    this.chunks = new Array(size);
     this.hasGenerated = false;
-    this.minTime = 0;
-    this.randInterval = 0;
+    this.minTime = 1000;
+    this.randInterval = 1000;
 
-    this.init = function(id, size) {
-        this.id = id;
-        this.size = size;
-        this.chunks = new Array(size);
-        this.hasGenerated = false;
-        this.minTime = 1000;
-        this.randInterval = 1000;
-    }
     //Handles the actual enemy generation
     //A simple modification of Kyle's enemyManger.spawnEnemy()
     this.randomEnemy = function(){
@@ -51,6 +43,7 @@ function segment(id, size) {
             };
             arr[i] = obj;
         }
+        return arr;
     }
     //Returns a serialized version of toObj
     this.serialize = function(segmentPosition) {
