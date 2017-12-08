@@ -102,7 +102,7 @@ function GameManager() {
 		}
 	}*/
 
-	this.setState =  function(newState) {
+	this.setState =  function(newState, seed) {
 		state = newState;
 
 		switch(state) {
@@ -122,7 +122,7 @@ function GameManager() {
 				updateStats();
 				player.posY = floorPosY;
 				player.velY = 0;
-				enemyManager.init();
+				enemyManager.init(state, seed);
 				score = 0;
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
 				document.getElementById("score").style.display = "block";
@@ -139,7 +139,7 @@ function GameManager() {
 				updateStats();
 				player.posY = floorPosY;
 				player.velY = 0;
-				enemyManager.init();
+				enemyManager.init(state, seed);
 				score = 0;
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
 				document.getElementById("score").style.display = "block";

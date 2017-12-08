@@ -195,13 +195,15 @@
 				} else {
 					document.getElementById('opp_cookie').innerHTML = cookie1;					
 				}
+
 				console.log('startMatch', matchInfo);
 				//start game
 				document.getElementById('notfication').style.display = 'none';
 				document.getElementById('notfication').innerHTML = 'Finding an opponent...';
 
-				gameManager.setState("Multiplayer");
 
+				var roomid = parseInt(/\d+/.exec(document.getElementById("roomid").innerHTML));
+				gameManager.setState("Multiplayer", roomid);
 			});
 
 			socket.on('Server.endMatch', function(summary) {
