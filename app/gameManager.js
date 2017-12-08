@@ -34,10 +34,9 @@ function GameManager() {
         	case "duck":
         		rivalPlayer.duck();
         		break;
-        	case "doneDuck":
+        	case "ducked":
         		rivalPlayer.doneDuck();
         		break;
-
         }
     });
 
