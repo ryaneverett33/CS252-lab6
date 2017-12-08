@@ -8,7 +8,6 @@ function GameManager() {
 	var score = 0;
 	var increaseScoreInterval = 1; //seconds
 	var scoreIntervalRet;
-	var won = false;
 	//var highscore_string = document.getElementById("hs").innerHTML;
 	//parseInt("10") + "<br>";
 	//console.log(highscore);
@@ -29,7 +28,6 @@ function GameManager() {
         		rivalPlayer.jump();
         		break;
         	case "hit":
-        	    won = true;
         		that.setState("MultiplayerDeathMenu");
         }
     });
@@ -132,7 +130,6 @@ function GameManager() {
 				enemyManager.init();
 				score = 0;
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
-				won = false;
 				document.getElementById("score").style.display = "block";
 				document.getElementById("score").innerHTML = "Score: 0";
 				document.getElementById("hs").style.display = "block";
@@ -147,7 +144,7 @@ function GameManager() {
 				document.getElementById("singlePlayerDeathMenu").style.display = "block";
 				window.clearInterval(scoreIntervalRet);
 				if (newHS) {
-					console.log("GAME OVER");
+					console.log("GAME OVER, SETTING NEW HS");
 					//set new highscore in database
 					$(document).ready(function(){
 						var request = new XMLHttpRequest();
@@ -160,8 +157,8 @@ function GameManager() {
 								console.log("Set user endpoint failure");
 							}
 						});
-						//request.open("POST", "http://dinodash.azurewebsites.net/user/set");
-						request.open("POST", "http://localhost:1337/user/set");
+						request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						//request.open("POST", "http://localhost:1337/user/set");
 
 						request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
 					});
@@ -185,8 +182,8 @@ function GameManager() {
 								console.log("Set user endpoint failure");
 							}
 						});
-						//request.open("POST", "http://dinodash.azurewebsites.net/user/set");
-						request.open("POST", "http://localhost:1337/user/set");
+						request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						//request.open("POST", "http://localhost:1337/user/set");
 
 						request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
 					});

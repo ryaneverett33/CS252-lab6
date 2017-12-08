@@ -165,7 +165,7 @@
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
-		var socket = io.connect('http://localhost:1337');
+		var socket = io.connect('http://dinodash.azurewebsites.net/');
 		var gameManager = new GameManager();
 		gameManager.setState("mainMenu");
 
@@ -192,7 +192,25 @@
 
             socket.on('Server.endMatch', function(summary) {
             	//add win if winner
-
+            	if (summary.winner == document.cookie.split("=")[1])
+					console.log("ADDING WIN");
+					$(document).ready(function(){
+						var wins = parseInt(/\d+/.exec(document.getElementById("wins").innerHTML));
+						console.log("CURRENT WINS: " + wins);
+						var request = new XMLHttpRequest();
+						request.addEventListener("load", function () {
+							var recieved = this.responseText;
+							var json = JSON.parse(recieved);
+							if(request.status === 200) { //200 status = success
+								console.log("Set user endpoint success");
+							} else { //invalid login credentials
+								console.log("Set user endpoint failure");
+							}
+						});
+						request.open("POST", "http://dinodash.azurewebsites.net/user/set");
+						//request.open("POST", "http://localhost:1337/user/set");
+						request.send(JSON.stringify({ "column": "Wins", "value": wins, "cookie": document.cookie.split("=")[1] }));		
+					});
             	//leave
             	console.log("ENDMATCH SOCKET SHIT");
             	document.getElementById('roomid').innerHTML = '';
