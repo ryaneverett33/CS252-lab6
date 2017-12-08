@@ -98,7 +98,7 @@ function GameManager() {
 	this.setState =  function(newState) {
 		state = newState;
 
-		switch(state) {
+		switch(state, seed) {
 			case "mainMenu":
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
 				document.getElementById("score").style.display = "none";
@@ -112,7 +112,7 @@ function GameManager() {
 			case "singlePlayer":
 				player.posY = floorPosY;
 				player.velY = 0;
-				enemyManager.init();
+				enemyManager.init(state, seed);
 				score = 0;
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
 				document.getElementById("score").style.display = "block";
@@ -128,7 +128,7 @@ function GameManager() {
 			case "Multiplayer":
 				player.posY = floorPosY;
 				player.velY = 0;
-				enemyManager.init();
+				enemyManager.init(state, seed);
 				score = 0;
 				scoreIntervalRet = setInterval(increaseScore, 1000 * increaseScoreInterval);
 				document.getElementById("score").style.display = "block";

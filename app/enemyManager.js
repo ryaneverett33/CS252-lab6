@@ -11,16 +11,27 @@ function EnemyManager(floorPosY, canvasWidth) {
 
 	this.randInterval = 1000;
 
-	this.init = function() {
+	var seed = 1;
+	function random() {
+		var x = Math.sin(seed++) * 10000;
+		return x - Math.floor(x);
+	}
+
+	this.init = function(state, newSeed) {
 		enemies.length = 0;
 		clearInterval(ret);
-		ret = setInterval(that.spawnEnemy, 1000);
+		ret = setInterval(that.spawnEnemy(state), 1000);
 		this.speed = initSpeed;
 		this.minTime = initMinTime;
+
+		if(state == "Multiplayer") {
+			seed = newSeed;
+		}
 	}
 
 	this.spawnEnemy = function() {
-		var rand = Math.random();
+		//var rand = Math.random();
+		var rand = random();
 
 		if(rand > 0.5) {
 			var e = new Enemy(floorPosY, canvasWidth, "floor");
@@ -32,7 +43,9 @@ function EnemyManager(floorPosY, canvasWidth) {
 		}
 
 		clearInterval(ret);
-		ret = setInterval(that.spawnEnemy, that.minTime + Math.random() * that.randInterval);
+		//ret = setInterval(that.spawnEnemy, that.minTime + Math.random() * that.randInterval);
+		ret = setInterval(that.spawnEnemy, that.minTime + random() * that.randInterval);
+		console.log(random());
 	}
 
 	this.update = function(playerPosX, playerPosY, playerWidth, playerHeight, state) {

@@ -153,6 +153,7 @@
 	<p id="username"></p>
 	<p id="roomid"></p>
 	<p id="notfication">Looking for opponent...</p>
+
 	<script src="input.js"></script>
 	<script src="enemy.js"></script>
 	<script src="enemyManager.js"></script>
@@ -188,8 +189,8 @@
 				document.getElementById('notfication').style.display = 'none';
 				document.getElementById('notfication').innerHTML = 'Finding an opponent...';
 
-				gameManager.setState("Multiplayer");
-
+				var roomid = parseInt(/\d+/.exec(document.getElementById("roomid").innerHTML));
+				gameManager.setState("Multiplayer", roomid);
 			});
 
 			socket.on('Server.endMatch', function(summary) {
