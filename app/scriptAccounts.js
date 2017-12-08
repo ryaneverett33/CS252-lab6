@@ -45,7 +45,7 @@ $(document).ready(function(){
 	Get user stats function
 	*/
 
-	$("#singlePlayerButton").click(function() {
+	/*$("#singlePlayerButton").click(function() {
 		//Get highscore and wins
 		console.log("COOKIE IS NOW: " + document.cookie.split("=")[1]);
 		//Check for blank or null
@@ -69,7 +69,7 @@ $(document).ready(function(){
 		//request.open("POST", "http://localhost:1337/user/get");
 		request.send(JSON.stringify({ "cookie": document.cookie.split("=")[1] }));		
 		
-	});
+	});*/
 
 
 	/**

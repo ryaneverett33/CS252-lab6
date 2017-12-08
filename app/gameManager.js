@@ -110,6 +110,7 @@ function GameManager() {
 
 				break;
 			case "singlePlayer":
+				updateStats();
 				player.posY = floorPosY;
 				player.velY = 0;
 				enemyManager.init();
@@ -126,6 +127,7 @@ function GameManager() {
 
 				break;
 			case "Multiplayer":
+				updateStats();
 				player.posY = floorPosY;
 				player.velY = 0;
 				enemyManager.init();
@@ -210,6 +212,27 @@ function GameManager() {
 				}*/
 
 		}
+	}
+	function updateStats() {
+		var request = new XMLHttpRequest();
+		request.addEventListener("load", function () {
+			var recieved = this.responseText;
+			var json = JSON.parse(recieved);
+			hs = json.highscore;
+			wins = json.wins;
+			if(request.status === 200) { //200 status = success
+				document.getElementById("hs").innerHTML = "Highscore = " + hs
+				document.getElementById("wins").innerHTML = "Wins = " + wins;
+
+
+			} else { //invalid login credentials
+				document.getElementById("hs").innerHTML = "Highscore = N.A.";
+				document.getElementById("wins").innerHTML = "Wins = N.A.";
+			}
+		});
+		request.open("POST", "http://dinodash.azurewebsites.net/user/get");
+		//request.open("POST", "http://localhost:1337/user/get");
+		request.send(JSON.stringify({ "cookie": document.cookie.split("=")[1] }));
 	}
 
 	function update() {
