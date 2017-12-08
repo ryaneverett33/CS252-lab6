@@ -169,7 +169,7 @@
 		var canvasElement = document.getElementById("canvas");
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
-		var socket = io.connect('http://dinodash.azurewebsites.net/');
+		var socket = io.connect('http://dinodash.azurewebsites.net/', {transports: ['websocket']});
 		var gameManager = new GameManager();
 		gameManager.setState("mainMenu");
 
