@@ -6,6 +6,7 @@
             var usernameOne;
             var usernameTwo;
             var matchid;
+            var boardSpot = 0;
             socket.on('Match.foundGame', function(roominfo) {
                 console.log('foundGame', roominfo);
                 matchid = roominfo.roomid;
@@ -25,9 +26,15 @@
             socket.on('Match.error', function(errorObj) {
                 console.log('Matcherror', errorObj);
             });
+            socket.on('Match.left', function(leftObj) {
+                console.log('Matchleft', leftObj);
+            })
             socket.on('Player.error', function(errorObj) {
                 console.log('Player error', errorObj);
             });
+            socket.on('Match.players', function(playerObj) {
+                console.log('getPlayers', playerObj);
+            })
             socket.on('Player.dead', function(deadObj) {
                 console.log('Playerdead', deadObj);
             });
@@ -82,6 +89,27 @@
                     });
                 }
             }
+            function playerOneLeave() {
+                console.log({
+                    roomid : matchid,
+                    username : usernameOne
+                });
+                socket.emit("Match.leave", {
+                    roomid : matchid,
+                    username : usernameOne
+                });
+            }
+            function getBoard() {
+                socket.emit("Match.getBoard", {
+                    roomid : matchid,
+                    distance : (100 * boardSpot) + 75
+                });
+            }
+            function getPlayers() {
+                socket.emit("Match.getPlayers", {
+                    roomid : matchid
+                });
+            }
         </script>
     </head>
     <body>
@@ -91,5 +119,8 @@
         <button onclick="playerOneAction('jump')">Player One Jump</button>
         <button onclick="playerOneAction('duck')">Player One Duck</button>
         <button onclick="playerOneAction('hit')">Player One hit</button>
+        <button onclick="playerOneLeave()">Player One leave</button>
+        <button onclick="getBoard()">GetBoard</button>
+        <button onclick="getPlayers()">GetPlayers</button>
     </body>
 </html>

@@ -1,5 +1,6 @@
 # Dino Dash - Match Signals
 Signals emitted by the client are denoted with a C. Signals emitted by the server are denoted with a S.
+## **Responses/Requests are not in json, they're the actual object**
 ### Match.findGame C
 #### Request
 ```json
@@ -21,12 +22,19 @@ Error: Match.error
 	"username" : string
 }
 ```
-Kills the player (username) in match (roomid). If the game is a two person game (which is most likely is), the game will be ended.
+Kills the player (username) in match (roomid). If the game is a two person game (which is most likely is), the game will be ended. **If** the player is still in the lobby, the player just leaves the lobby.
 
-Success: Player.dead, Server.endMatch
+Success: Match.left (if empty), Player.dead, Server.endMatch
 Error: Player.error
 ### Match.getPlayers C
-TBD
+```json
+{
+	"roomid" int
+}
+```
+Gets the players currently in the match/room.
+Success: Match.players
+Error: Match.error
 ### Match.getBoard C
 #### Request
 ```json
@@ -86,3 +94,11 @@ Describes an error that occurred with a previous request.
 ]
 ```
 Returns an array of all the players (usernames) in the match.
+### Match.left S
+#### Response
+```json
+{
+	"roomid" : int
+}
+```
+Returns the match that was left.

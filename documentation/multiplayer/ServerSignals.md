@@ -1,5 +1,6 @@
 # Dino Dash - Server Signals
 Signals emitted by the client are denoted with a C. Signals emitted by the server are denoted with a S.
+## **Responses/Requests are not in json, they're the actual object**
 ### Server.startMatch S
 #### Response
 ```json
