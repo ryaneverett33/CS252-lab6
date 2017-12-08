@@ -245,24 +245,25 @@ function GameManager() {
 		//request.open("POST", "http://localhost:1337/user/get");
 		request.send(JSON.stringify({ "cookie": document.cookie.split("=")[1] }));
 
+		if (state == "Multiplayer") {
+			var request2 = new XMLHttpRequest();
+			var opponent_cookie = document.getElementById("opp_cookie").innerHTML;
 
-		var request2 = new XMLHttpRequest();
-		var opponent_cookie = document.getElementById("opp_cookie").innerHTML;
-
-		request2.addEventListener("load", function () {
-			var recieved = this.responseText;
-			var json = JSON.parse(recieved);
-			hs = json.highscore;
-			wins = json.wins;
-			if(request2.status === 200) { //200 status = success
-				document.getElementById("opp_cookie").innerHTML = "Opponent Wins = " + wins;
-			} else { //invalid login credentials
-				document.getElementById("opp_cookie").innerHTML = "Opponent Wins = N.A.";
-			}
-		});
-		request2.open("POST", "http://dinodash.azurewebsites.net/user/get");
-		//request.open("POST", "http://localhost:1337/user/get");
-		request2.send(JSON.stringify({ "cookie": opponent_cookie }));
+			request2.addEventListener("load", function () {
+				var recieved = this.responseText;
+				var json = JSON.parse(recieved);
+				hs = json.highscore;
+				wins = json.wins;
+				if(request2.status === 200) { //200 status = success
+					document.getElementById("opp_cookie").innerHTML = "Opponent Wins = " + wins;
+				} else { //invalid login credentials
+					document.getElementById("opp_cookie").innerHTML = "Opponent Wins = N.A.";
+				}
+			});
+			request2.open("POST", "http://dinodash.azurewebsites.net/user/get");
+			//request.open("POST", "http://localhost:1337/user/get");
+			request2.send(JSON.stringify({ "cookie": opponent_cookie }));
+		}
 	}
 
 	function update() {

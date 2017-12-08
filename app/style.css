@@ -39,11 +39,11 @@ p:hover {
 
 #username {
 	position: absolute;
-	left: 41%;
+	left: 50%;
 	top: 4px;
 }
 
-#notification {
+#notfication {
 	position: absolute;
 	left: 41%;
 	top: 29px;
