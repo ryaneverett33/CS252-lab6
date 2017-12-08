@@ -14,6 +14,7 @@ function routerInit() {
 	route("POST", "/user/create", routesManager.create);
 	route("POST", "/user/get", routesManager.get);
 	route("POST", "/user/set", routesManager.set);
+	route("POST", "/leaderboards/get", routesManager.leaderboards);
 	route(routesManager.static);
 }
 
