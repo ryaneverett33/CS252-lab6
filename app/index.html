@@ -133,6 +133,7 @@
 	<div class="menu" id="mainMenu">
 		<p id="singlePlayerButton">Single player</p>
 		<p id="multiPlayerButton">Multiplayer</p>
+		<p id="leaderboardButton">Leaderboard</p>
 	</div>
 
 	<div class="menu" id="singlePlayerDeathMenu" style="display: none;">
@@ -146,6 +147,11 @@
 	</div>
 	<div class="menu" id="MultiplayerDeathMenu" style="display: none;">
 		<p id="mainMenuButtonMult">Main menu</p>
+	</div>
+	<div class="menu" id="LeaderboardMenu" style="display: none;">
+		<p id="mainMenuButtonLead">Main menu</p>
+		<table id="leaderboardTable" style="width: 300px;">
+		</table>
 	</div>
 	<p id="hs">Highscore: 10</p>
 	<p id="score">Score: 0</p>
@@ -161,6 +167,7 @@
 	<script src="player.js"></script>
 	<script src="rivalPlayer.js"></script>
 	<script src="gameManager.js"></script>
+	<script src="leaderboard.js"></script>
 	<script src="socket.io/socket.io.js"></script>
 	<script>
 		document.getElementById('roomid').style.display = 'none';
@@ -170,6 +177,7 @@
 		var canvas = canvasElement.getContext("2d");
 		canvas.imageSmoothingEnabled = false;
 		var socket = io.connect('http://dinodash.azurewebsites.net/', {transports: ['websocket']});
+		//var socket = io.connect('localhost:1337', {transports: ['websocket']});
 		var gameManager = new GameManager();
 		gameManager.setState("mainMenu");
 
@@ -205,6 +213,7 @@
 				var roomid = parseInt(/\d+/.exec(document.getElementById("roomid").innerHTML));
 				gameManager.setState("Multiplayer", roomid);
 			});
+			
 
 			socket.on('Server.endMatch', function(summary) {
 				//set opponent wins to null
@@ -282,8 +291,10 @@
 			document.getElementById('notfication').style.display = 'block';
 
 		}
-
-
+		document.getElementById("leaderboardButton").onclick = function() {
+			gameManager.setState("LeaderboardMenu");
+			handleTable();
+		}
 
 		document.getElementById("singlePlayerRestartButton").onclick = function() {
 			gameManager.setState("singlePlayer");
@@ -295,6 +306,9 @@
 		document.getElementById("mainMenuButtonMult").onclick = function() {
 			gameManager.setState("mainMenu");
 		};
+		document.getElementById("mainMenuButtonLead").onclick = function() {
+			gameManager.setState("mainMenu");
+		}
 
 		//if there's a cookie
 		if(document.cookie.split("=")[1] != undefined) {

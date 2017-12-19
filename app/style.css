@@ -73,5 +73,17 @@ p:hover {
     top:4px;
     right:4px;
 }
-
-
+.win-cell {
+	text-overflow: clip;
+	min-width: 15%;
+	max-width: 30%;
+}
+.name-cell {
+	text-overflow: clip;
+	max-width: 70%;
+	min-width: 45%;
+}
+.score-cell {
+	text-overflow: clip;
+	width: 15%;
+}

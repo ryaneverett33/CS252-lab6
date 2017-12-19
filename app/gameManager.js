@@ -117,6 +117,7 @@ function GameManager() {
 
 				document.getElementById("mainMenu").style.display = "block";
 				document.getElementById("MultiplayerDeathMenu").style.display = "none";
+				document.getElementById("LeaderboardMenu").style.display = "none";
 				canvas.clearRect(0, 0, width, height);
 
 				break;
@@ -133,6 +134,7 @@ function GameManager() {
 				//document.getElementById("wins").style.display = "block";
 
 				document.getElementById("mainMenu").style.display = "none";
+				document.getElementById("LeaderboardMenu").style.display = "none";
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
 				canvasElement.focus();
 
@@ -153,7 +155,9 @@ function GameManager() {
 
 
 				document.getElementById("mainMenu").style.display = "none";
+				document.getElementById("LeaderboardMenu").style.display = "none";
 				document.getElementById("singlePlayerDeathMenu").style.display = "none";
+				
 				canvasElement.focus();
 
 				break;
@@ -180,6 +184,21 @@ function GameManager() {
 						request.send(JSON.stringify({ "column": "HighScore", "value": score.toString(), "cookie": document.cookie.split("=")[1] }));		
 					});
 				}
+				break;
+			case "LeaderboardMenu" :
+				document.getElementById("singlePlayerDeathMenu").style.display = "none";
+				document.getElementById("score").style.display = "none";
+				document.getElementById("hs").style.display = "none";
+				document.getElementById("wins").style.display = "none";
+				document.getElementById("opWins").style.display = "none";
+				document.getElementById('notfication').style.display = 'none';
+
+
+				document.getElementById("mainMenu").style.display = "none";
+				document.getElementById("MultiplayerDeathMenu").style.display = "none";
+
+				document.getElementById("LeaderboardMenu").style.display = "block";
+				canvas.clearRect(0, 0, width, height);
 				break;
 		    case "MultiplayerDeathMenu":
 				document.getElementById("MultiplayerDeathMenu").style.display = "block";

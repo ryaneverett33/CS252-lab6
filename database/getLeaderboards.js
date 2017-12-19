@@ -2,7 +2,7 @@ var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
 var pool = require('./pool.js');
 
-function fillObject(columns) {
+/*function fillObject(columns) {
     var obj = {};
     for (var i = 0; i < columns.length; i++) {
         var column = columns[i];
@@ -10,12 +10,32 @@ function fillObject(columns) {
         obj[column.metadata.colName] = column.value;
     }
     return obj;
+}*/
+function fillUser(results) {
+    //Name, Wins, HighScore
+    /*
+    var user = {
+          Id : results[0].Id,
+          Name : results[0].Name,
+          Password : results[0].Password,
+          Wins : results[0].Win,
+          HighScore : results[0].HighScore
+        }
+    */
+    if (results == null || results.Name == null || results.Wins == null || results.HighScore == null) {
+        return null;
+    }
+    return {
+        Name : results.Name,
+        Wins : results.Wins,
+        HighScore : results.HighScore
+    };
 }
 
-//calls callback(user object)
+//calls callback(user object[])
 //[ { Name: 'Ric Flair', Wins: 33, HighScore: 41 },
 function get(count, callback) {
-    pool.get(function (err, connection) {
+    /*pool.get(function (err, connection) {
         var arr = [];
         if (err) {
             console.log(err);
@@ -60,7 +80,40 @@ function get(count, callback) {
             arr.push(user);
         });
         connection.execSql(request);
-    });
+    });*/
+    //SELECT Name, Wins, HighScore FROM Users Order By Highscore Desc Limit 10;
+    pool.query("SELECT Name, Wins, HighScore FROM Users Order By Highscore Desc Limit ?;", [count], function (error, results, fields) {
+        if (error) {
+            console.error("Failed to get leaderboards, error: %s", error);
+            callback(null);
+            return;
+        }
+        else {
+            if (results.length == 0) {
+                if (callback != null) {
+                    callback([]);
+                    return;
+                }
+            }
+            else {
+                //fill array
+                //var arr = new Array(count);
+                var arr = new Array(); //account for nulls
+                for (var i = 0; i < count; i++) {
+                    var user = fillUser(results[i]);
+                    if (user == null) {
+                        continue;
+                    }
+
+                    arr.push(user);
+                }
+                if (callback != null) {
+                    callback(arr);
+                    return;
+                }
+            }
+        }
+    })
 }
 
 

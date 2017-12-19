@@ -66,7 +66,6 @@ function add(name, password, callback) {
       //insert and then select
       //request = new Request("INSERT users (Name, Password, Wins, HighScore) OUTPUT INSERTED.Id VALUES (@Name, @Password, 0, 0);", function (err, rowcount) {
       connection.query('INSERT INTO users VALUES (NULL,?,?,0,0);', [name, password], function(error2, results, fields) {
-        console.log("queried");
         if (error2) {
           console.error("An error occured adding user to database: %s", error2);
           callback(false);
