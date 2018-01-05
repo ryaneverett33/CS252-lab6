@@ -7,7 +7,7 @@ Dino Dash is a game where you play as a dinosaur and must dodge obstacles as you
 - [Node.js](https://nodejs.org/en/)
 - [Socket.io](https://socket.io/)
 - [Microsoft Azure](https://azure.microsoft.com/en-us/)
-- [mySQL](https://www.mysql.com/)
+- [MS SQL](https://www.microsoft.com/en-US/sql-server/) and [mySQL](https://www.mysql.com/)
 - [Bootstrap](https://getbootstrap.com/)
 - [jQuery](https://jquery.com/)
 
