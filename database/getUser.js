@@ -99,7 +99,7 @@ function get(name, callback) {
           Id : results[0].Id,
           Name : results[0].Name,
           Password : results[0].Password,
-          Wins : results[0].Win,
+          Wins : results[0].Wins,
           HighScore : results[0].HighScore
         }
         callback(user);

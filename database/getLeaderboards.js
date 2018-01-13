@@ -48,7 +48,9 @@ function get(count, callback) {
         // If no error, then good to proceed.  
         console.log("Connected!");
         //SELECT Top 10 Name, Wins, HighScore FROM Users Order By HighScore DESC;
-        request = new Request("SELECT Top " + count.toString() + " Name, Wins, HighScore FROM Users Order By HighScore Desc;", function (err, rowcount) {
+        request = new Request("SELECT Top " + count.toString() + " Name, 
+Wins, HighScore FROM users Order By HighScore Desc;", function (err, 
+rowcount) {
             if (err) {
                 console.log('err', err);
                 if (callback != null) {
@@ -82,7 +84,7 @@ function get(count, callback) {
         connection.execSql(request);
     });*/
     //SELECT Name, Wins, HighScore FROM Users Order By Highscore Desc Limit 10;
-    pool.query("SELECT Name, Wins, HighScore FROM Users Order By Highscore Desc Limit ?;", [count], function (error, results, fields) {
+    pool.query("SELECT Name, Wins, HighScore FROM users Order By Highscore Desc Limit ?;", [count], function (error, results, fields) {
         if (error) {
             console.error("Failed to get leaderboards, error: %s", error);
             callback(null);

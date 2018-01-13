@@ -174,7 +174,9 @@ function match(roomid, MAXPLAYERS) {
         var valid = actionObj.action.toLowerCase() === "jump";
         valid = valid || actionObj.action.toLowerCase() === "duck";
         valid = valid || actionObj.action.toLowerCase() === "hit";
+        valid = valid || actionObj.action.toLowerCase() === "ducked";
         if (valid) {
+            console.log("Sent %s", actionObj.action);
             this.sendToPlayersExcept(actionObj.username, "Match.playerUpdate", {
                 username : actionObj.username,
                 action : actionObj.action

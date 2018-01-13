@@ -22,10 +22,11 @@ exports.init = function() {
     
     pool = mysql.createPool({
         connectionLimit : 10,
-        host : 'localhost',
+        host : 'dinodash.scheduleit.duckdns.org',
         user : 'dino',
         password : 'cs252Purdue',
-        database : 'DinoDb'
+        database : 'DinoDb',
+	    port : 3306
     });
 }
 //callback (err, connection)
