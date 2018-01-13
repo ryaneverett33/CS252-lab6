@@ -311,6 +311,9 @@ exports.init = function(io) {
         socket.on('Player.hit', function(actionObj) {
             handlePlayerAction(socket, actionObj);
         });
+        socket.on('Player.doneDuck', function(actionObj) {
+            handlePlayerAction(socket, actionObj);
+        })
         socket.on('Match.getBoard', function(distanceObj) {
             getBoard(socket, distanceObj);
         });

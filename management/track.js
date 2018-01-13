@@ -100,13 +100,13 @@ exports.setUser = function (column, value, cookie, callback) {
         callback(-1, -1);
         return;
     } else {
-        console.log("PRINTING COOKIES");
+        /*console.log("PRINTING COOKIES");
         for (var c in users) {
             //for all keys in dictionary
             console.log(users[c]);
             console.log(c);
         }
-        console.log("DONE PRINTING COOKIES");
+        console.log("DONE PRINTING COOKIES");*/
         var user = users[cookie];
         console.log("User: " + user);
         UserSetter.set(column, value, user, function (userid) {

@@ -4,39 +4,43 @@ Use get per on('row'), use release on new request()
 DO NOT USER RELEASE on on('row')
 */
 
-var ConnectionPool = require('tedious-connection-pool');
+var mysql = require('mysql');
 
-var poolConfig;
-var connectionConfig;
+//var ConnectionPool = require('tedious-connection-pool');
+
 var pool;
 
 exports.init = function() {
-    poolConfig = {
-        min: 2,
-        max: 10,
-        log: true
-    };
-    
-    connectionConfig = {  
+    /*connectionConfig = {  
       userName: 'dino',  
       password: 'cs252Purdue',  
       server: 'dinodb.database.windows.net',   
       options: {
         encrypt: true, database: 'DinoDb'
       }  
-    };
+    };*/
     
-    pool = new ConnectionPool(poolConfig, connectionConfig);
-    
-    pool.on('error', function(err) {
-        console.error(err);
-        return null;
+    pool = mysql.createPool({
+        connectionLimit : 10,
+        host : 'dinodash.scheduleit.duckdns.org',
+        user : 'dino',
+        password : 'cs252Purdue',
+        database : 'DinoDb',
+	    port : 3306
     });
 }
-//function (err, connection)
+//callback (err, connection)
 exports.get = function(callback) {
-    pool.acquire(callback);
+    //callback(pool.getConnection(callback));
+    pool.getConnection(callback);
 }
 exports.release = function(connection) {
     connection.release();
+}
+//callback = function(error,results,fields)
+exports.query = function(sql, callback) {
+    pool.query(sql, callback);
+}
+exports.query = function(sql, values, callback) {
+    pool.query(sql, values, callback);
 }

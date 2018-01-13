@@ -1,8 +1,8 @@
-var Request = require('tedious').Request;
-var TYPES = require('tedious').TYPES;
+//var Request = require('tedious').Request;
+//var TYPES = require('tedious').TYPES;
 var pool = require('./pool.js');
 
-function fillObject(columns) {
+/*function fillObject(columns) {
   var obj = {};
   for (var i = 0; i < columns.length; i++) {
     var column = columns[i];
@@ -10,10 +10,10 @@ function fillObject(columns) {
     obj[column.metadata.colName] = column.value;
   }
   return obj;
-}
+}*/
 
 //calls callback(user object)
-function get(name, callback) {
+/*function get(name, callback) {
   pool.get(function (err, connection) {
     if (err) {
       console.log(err);
@@ -48,7 +48,7 @@ function get(name, callback) {
     });
     request.addParameter('Name', TYPES.NVarChar, name);
     var obj = {};
-    request.on('row', function (columns) {
+    request.on('row', function (columns) {*/
       /*columns.forEach(function(column) {  
         /*if (column.value === null) {  
           console.log('NULL');  
@@ -62,7 +62,7 @@ function get(name, callback) {
       /*if (callback != null) {
         callback(columns);
       }*/
-      var user = fillObject(columns);
+      /*var user = fillObject(columns);
       user["name"] = name;
       if (callback != null) {
         console.log("Returning ", user);
@@ -72,7 +72,41 @@ function get(name, callback) {
     });
     connection.execSql(request);
   });
+}*/
+function get(name, callback) {
+  pool.query('SELECT * FROM users WHERE Name=?;', [name], function(error, results, fields) {
+    if (error) {
+      console.error("An error occured getting user: %s",error);
+      callback(null);
+      return;
+    }
+    if (results.length == 0) {
+      if (callback != null) {
+        callback(null);
+        return;
+      }
+    }
+    else {
+      if (callback != null) {
+        /*
+        Id: 37,
+        Name: 'demoUser3',
+        Password: 'password',
+        Wins: 1,
+        HighScore: 3
+        */
+        var user = {
+          Id : results[0].Id,
+          Name : results[0].Name,
+          Password : results[0].Password,
+          Wins : results[0].Wins,
+          HighScore : results[0].HighScore
+        }
+        callback(user);
+        return;
+      }
+    }
+  });
 }
-
 
 exports.get = get;

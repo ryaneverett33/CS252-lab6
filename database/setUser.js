@@ -1,19 +1,17 @@
-var Request = require('tedious').Request;
-var TYPES = require('tedious').TYPES;
+//var Request = require('tedious').Request;
+//var TYPES = require('tedious').TYPES;
 var pool = require('./pool.js');
-
-function fillObject(columns) {
-  var obj = {};
-  for (var i = 0; i < columns.length; i++) {
-    var column = columns[i];
-    //console.log("name, value", column.metadata.colName, column.value);
-    obj[column.metadata.colName] = column.value;
+function BoolToInt(value) {
+  if (value) {
+    return 1;
   }
-  return obj;
+  else {
+    return -1;
+  }
 }
-
+//callback(boolINT [-1,1])
 function set(column, newvalue, name, callback) {
-  pool.get(function (err, connection) {
+  /*pool.get(function (err, connection) {
     // If no error, then good to proceed.  
     //table columns: Id, Name, Password, Wins, HighScore (Id is AUTO_INCREMENT, Name is UNIQUE)
     var request = null;
@@ -110,7 +108,61 @@ function set(column, newvalue, name, callback) {
       request.addParameter('Name', TYPES.NVarChar, name);
     }
     connection.execSql(request);
-  });
+  });*/
+  if (column === 'Password') {
+    //"UPDATE users SET Password = @Value WHERE Name = @Name;"
+    pool.query("UPDATE users SET Password=? WHERE Name=?;", [newvalue, name], function(error, results, fields){
+      if (error) {
+        console.error("An error occured when setting user password in database:", error);
+        callback(-1);
+        return;
+      }
+      else {
+        if (callback != null) {
+          callback(BoolToInt(results.affectedRows == 1));
+        }
+        return;
+      }
+    });
+  }
+  else if (column === 'Wins') {
+    //"UPDATE users SET Wins = @Value WHERE Name = @Name;"
+    pool.query("UPDATE users SET Wins=? WHERE Name=?;", [newvalue, name], function(error, results, fields) {
+      if (error) {
+        console.error("An error occured when setting user password in database:", error);
+        callback(-1);
+        return;
+      }
+      else {
+        if (callback != null) {
+          callback(BoolToInt(results.affectedRows == 1));
+        }
+        return;
+      }
+    });
+  }
+  else if (column === 'HighScore') {
+    //"UPDATE users SET HighScore = @Value WHERE Name = @Name;"
+    pool.query("UPDATE users SET HighScore=? WHERE Name=?;", [newvalue, name], function(error, results, fields) {
+      if (error) {
+        console.error("An error occured when setting user password in database:", error);
+        callback(-1);
+        return;
+      }
+      else {
+        if (callback != null) {
+          callback(BoolToInt(results.affectedRows == 1));
+        }
+        return;
+      }
+    });
+  }
+  else {
+    console.error("Set User recieved an invalid column type");
+    if (callback != null) {
+      callback(-1);
+    }
+  }
 }
 
 
